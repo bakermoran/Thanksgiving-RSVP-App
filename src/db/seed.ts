@@ -39,6 +39,11 @@ await seed(db, schema, { seed: 1 }).refine((f) => ({
     count: 5,
     columns: {
       name: f.loremIpsum({ sentencesCount: 1 }),
+      address1: f.streetAddress(),
+      address2: undefined,
+      city: f.city(),
+      state: f.state(),
+      zip: f.postcode(),
       createdAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
       updatedAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
     },

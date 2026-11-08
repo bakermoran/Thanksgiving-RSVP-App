@@ -7,6 +7,11 @@ import { baseColumns } from "./base";
 export const eventsTable = sqliteTable("events", {
   ...baseColumns,
   name: text().notNull(),
+  address1: text().notNull(),
+  address2: text(),
+  city: text().notNull(),
+  state: text().notNull(),
+  zip: text().notNull(),
 });
 
 export const eventsSchema = createSelectSchema(eventsTable);

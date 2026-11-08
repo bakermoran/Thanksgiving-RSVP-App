@@ -15,6 +15,7 @@ interface PageHeaderProps {
   size?: TitleSize;
   children?: React.ReactNode;
   className?: string;
+  detail?: React.ReactNode;
 }
 
 export const PageHeader = ({
@@ -24,11 +25,17 @@ export const PageHeader = ({
   size = "lg",
   children,
   className,
+  detail,
 }: PageHeaderProps) => (
   <header className={cn("mb-10 text-center", className)}>
     {illustration}
     <p className={cn("eyebrow", !!illustration && "mt-3")}>{eyebrow}</p>
     <h1 className={cn("title-retro mt-2", titleSizes[size])}>{title}</h1>
+    {detail && (
+      <h3 className="text-cocoa hover:text-bark mt-2 text-md font-bold">
+        {detail}
+      </h3>
+    )}
     {children && (
       <p className="mx-auto mt-4 max-w-md text-lg font-medium text-cocoa">
         {children}

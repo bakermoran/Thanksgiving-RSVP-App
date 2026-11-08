@@ -5,6 +5,7 @@ import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { Link } from "@/ui/link";
 import { PageHeader } from "@/ui/page-header";
+import { mapsLink, toAddressString } from "@/utils/address";
 import {
   createFileRoute,
   getRouteApi,
@@ -49,6 +50,11 @@ function EventPage() {
         illustration={<EventProgress count={events.length} current={index} />}
         eyebrow={`Event ${index + 1} of ${events.length}`}
         title={event.name}
+        detail={
+          <a target="_blank" rel="noopener noreferrer" href={mapsLink(event)}>
+            {toAddressString(event)}
+          </a>
+        }
         size="md"
       />
 
