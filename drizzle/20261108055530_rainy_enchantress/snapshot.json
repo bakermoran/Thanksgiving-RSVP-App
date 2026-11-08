@@ -1,0 +1,160 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "53879b2d-190e-46d2-9128-9a4fa4e1771c",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "name": "invite_groups",
+      "entityType": "tables"
+    },
+    {
+      "name": "invitees",
+      "entityType": "tables"
+    },
+    {
+      "table": "invite_groups",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invite_groups",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invite_groups",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "invite_group_id",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "first_name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "last_name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "idx_invitees_fullname",
+      "columns": [
+        {
+          "value": "first_name",
+          "isExpression": false
+        },
+        {
+          "value": "last_name",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "invitees",
+      "name": "fk_invitees_invite_group_id_invite_groups_id_fk",
+      "columns": [
+        "invite_group_id"
+      ],
+      "tableTo": "invite_groups",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "invite_groups",
+      "name": "invite_groups_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "invitees",
+      "name": "invitees_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    }
+  ],
+  "renames": []
+}

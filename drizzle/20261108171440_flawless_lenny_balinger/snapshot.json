@@ -1,0 +1,340 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "f3dcf1f8-1ed5-4620-976c-34a3f000a4c6",
+  "prevIds": [
+    "03e3c6e6-f320-488f-b1f9-8940a9a5bf93"
+  ],
+  "ddl": [
+    {
+      "name": "events",
+      "entityType": "tables"
+    },
+    {
+      "name": "invite_groups",
+      "entityType": "tables"
+    },
+    {
+      "name": "invitees",
+      "entityType": "tables"
+    },
+    {
+      "name": "rsvps",
+      "entityType": "tables"
+    },
+    {
+      "table": "events",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "events",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "events",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "events",
+      "name": "name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invite_groups",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invite_groups",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invite_groups",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "invite_group_id",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "first_name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "last_name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "id",
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "event_id",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "invitee_id",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "rsvps",
+      "name": "is_attending",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "invitees",
+      "name": "idx_invitees_fullname",
+      "columns": [
+        {
+          "value": "first_name",
+          "isExpression": false
+        },
+        {
+          "value": "last_name",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "rsvps",
+      "name": "uq_rsvps_event_invitee",
+      "columns": [
+        {
+          "value": "event_id",
+          "isExpression": false
+        },
+        {
+          "value": "invitee_id",
+          "isExpression": false
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "invitees",
+      "name": "fk_invitees_invite_group_id_invite_groups_id_fk",
+      "columns": [
+        "invite_group_id"
+      ],
+      "tableTo": "invite_groups",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "rsvps",
+      "name": "fk_rsvps_event_id_events_id_fk",
+      "columns": [
+        "event_id"
+      ],
+      "tableTo": "events",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "rsvps",
+      "name": "fk_rsvps_invitee_id_invitees_id_fk",
+      "columns": [
+        "invitee_id"
+      ],
+      "tableTo": "invitees",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "events",
+      "name": "events_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "invite_groups",
+      "name": "invite_groups_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "invitees",
+      "name": "invitees_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "rsvps",
+      "name": "rsvps_pk",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "rsvps",
+      "name": "rsvps_is_attending_bool",
+      "value": "\"is_attending\" IN (0, 1)",
+      "entityType": "checks"
+    }
+  ],
+  "renames": []
+}

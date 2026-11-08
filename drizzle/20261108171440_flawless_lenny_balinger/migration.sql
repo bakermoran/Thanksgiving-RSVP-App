@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `uq_rsvps_event_invitee` ON `rsvps` (`event_id`,`invitee_id`);
