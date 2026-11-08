@@ -1,4 +1,4 @@
-import { cn } from "./cn";
+import { cn } from "../../utils/ui/cn";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement>;
 

@@ -1,7 +1,7 @@
 import { RsvpForm } from "@/features/rsvps/components/RsvpForm";
 import { getEventRsvps } from "@/features/rsvps/rsvps.functions";
 import { Card } from "@/features/ui/card";
-import { cn } from "@/features/ui/cn";
+import { cn } from "@/utils/ui/cn";
 import {
   Link,
   createFileRoute,

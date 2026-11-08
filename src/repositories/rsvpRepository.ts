@@ -3,10 +3,13 @@ import { inviteesTable } from "@/db/schema/invitee";
 import { rsvpsTable } from "@/db/schema/rsvp";
 import { and, eq, sql } from "drizzle-orm";
 
-export async function getRsvpsForInviteGroup(
-  inviteGroupId: number,
-  eventId?: number,
-) {
+export async function getRsvpsForInviteGroup({
+  inviteGroupId,
+  eventId,
+}: {
+  inviteGroupId: number;
+  eventId?: number;
+}) {
   return db
     .select({
       eventId: rsvpsTable.eventId,

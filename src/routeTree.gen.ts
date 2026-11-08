@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RsvpRouteImport } from './routes/_rsvp'
+import { Route as ObligationsRouteImport } from './routes/obligations'
 import { Route as RsvpRsvpRouteImport } from './routes/_rsvp/rsvp'
 import { Route as RsvpSummaryRouteImport } from './routes/_rsvp/summary'
 import { Route as RsvpEventsEventIdRouteImport } from './routes/_rsvp/events/$eventId'
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const RsvpRoute = RsvpRouteImport.update({
   id: '/_rsvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObligationsRoute = ObligationsRouteImport.update({
+  id: '/obligations',
+  path: '/obligations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RsvpRsvpRoute = RsvpRsvpRouteImport.update({
@@ -42,12 +48,14 @@ const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/obligations': typeof ObligationsRoute
   '/rsvp': typeof RsvpRsvpRoute
   '/summary': typeof RsvpSummaryRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/obligations': typeof ObligationsRoute
   '/rsvp': typeof RsvpRsvpRoute
   '/summary': typeof RsvpSummaryRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
@@ -56,19 +64,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_rsvp': typeof RsvpRouteWithChildren
+  '/obligations': typeof ObligationsRoute
   '/_rsvp/rsvp': typeof RsvpRsvpRoute
   '/_rsvp/summary': typeof RsvpSummaryRoute
   '/_rsvp/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/rsvp' | '/summary' | '/events/$eventId'
+  fullPaths: '/' | '/obligations' | '/rsvp' | '/summary' | '/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/rsvp' | '/summary' | '/events/$eventId'
+  to: '/' | '/obligations' | '/rsvp' | '/summary' | '/events/$eventId'
   id:
     | '__root__'
     | '/'
     | '/_rsvp'
+    | '/obligations'
     | '/_rsvp/rsvp'
     | '/_rsvp/summary'
     | '/_rsvp/events/$eventId'
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RsvpRoute: typeof RsvpRouteWithChildren
+  ObligationsRoute: typeof ObligationsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof RsvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/obligations': {
+      id: '/obligations'
+      path: '/obligations'
+      fullPath: '/obligations'
+      preLoaderRoute: typeof ObligationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_rsvp/rsvp': {
@@ -136,6 +154,7 @@ const RsvpRouteWithChildren = RsvpRoute._addFileChildren(RsvpRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RsvpRoute: RsvpRouteWithChildren,
+  ObligationsRoute: ObligationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

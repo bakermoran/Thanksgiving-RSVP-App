@@ -14,6 +14,10 @@ export const relations = defineRelations({ ...schemas }, (r) => ({
       to: r.inviteGroupsTable.id,
       optional: false,
     }),
+    obligations: r.many.obligationsTable({
+      from: r.inviteesTable.id,
+      to: r.obligationsTable.inviteeId,
+    }),
   },
   rsvpsTable: {
     invitee: r.one.inviteesTable({
@@ -31,6 +35,12 @@ export const relations = defineRelations({ ...schemas }, (r) => ({
     rsvps: r.many.rsvpsTable({
       from: r.eventsTable.id,
       to: r.rsvpsTable.eventId,
+    }),
+  },
+  obligationsTable: {
+    invitee: r.one.inviteesTable({
+      from: r.obligationsTable.inviteeId,
+      to: r.inviteesTable.id,
     }),
   },
 }));

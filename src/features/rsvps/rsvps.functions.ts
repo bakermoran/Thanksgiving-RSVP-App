@@ -20,7 +20,10 @@ export const getEventRsvps = createServerFn({
     const event = await getEvent(data.id);
     if (!event) throw notFound();
 
-    const rsvps = await getRsvpsForInviteGroup(inviteGroupId, event.id);
+    const rsvps = await getRsvpsForInviteGroup({
+      inviteGroupId,
+      eventId: event.id,
+    });
     return { event, rsvps };
   });
 
@@ -28,7 +31,7 @@ export const getMyRsvps = createServerFn({
   method: "GET",
 }).handler(async () => {
   const inviteGroupId = requireInviteGroupId();
-  return getRsvpsForInviteGroup(inviteGroupId);
+  return getRsvpsForInviteGroup({ inviteGroupId });
 });
 
 export const saveRsvps = createServerFn({

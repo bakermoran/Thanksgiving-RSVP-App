@@ -1,7 +1,8 @@
+import { ResponseBadge } from "@/features/rsvps/components/ResponseBadge";
 import { getMyRsvps } from "@/features/rsvps/rsvps.functions";
 import { Card } from "@/features/ui/card";
-import { cn } from "@/features/ui/cn";
-import { Link, createFileRoute, getRouteApi } from "@tanstack/react-router";
+import { Link } from "@/features/ui/link";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 const rsvpLayout = getRouteApi("/_rsvp");
 
@@ -33,6 +34,10 @@ function Summary() {
         <p className="eyebrow mt-3">Here's what's cookin'</p>
         <h1 className="title-retro mt-2 text-6xl">Your RSVPs</h1>
       </header>
+
+      <Link to="/summary">Back</Link>
+
+      <Link to="/obligations">View recipes</Link>
 
       <div className="space-y-8">
         {events.map((event, i) => (
@@ -88,24 +93,5 @@ function Summary() {
         ))}
       </div>
     </div>
-  );
-}
-
-function ResponseBadge({ isAttending }: { isAttending: boolean | undefined }) {
-  return (
-    <span
-      className={cn(
-        "shrink-0 rounded-full border-3 border-bark px-3 py-0.5 text-base font-bold",
-        isAttending === true && "bg-olive text-cream",
-        isAttending === false && "bg-cranberry text-cream",
-        isAttending === undefined && "border-dashed bg-cream text-cocoa",
-      )}
-    >
-      {isAttending === undefined
-        ? "No response"
-        : isAttending
-          ? "Attending"
-          : "Not attending"}
-    </span>
   );
 }
