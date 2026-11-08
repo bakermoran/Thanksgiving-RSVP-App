@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `idx_obligations_name` ON `obligations` (`name`);

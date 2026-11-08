@@ -1,11 +1,13 @@
 import {
   claimObligationSchema,
+  createObligationSchema,
   releaseObligationSchema,
 } from "@/db/schema/obligation";
 import { requireInviteGroupId } from "@/features/inviteGroups/inviteGroupAccess";
 import { requireInviteeId } from "@/features/invitees/inviteeAccess";
 import {
   claimObligation as claimObligationDb,
+  createObligation as createObligationDb,
   getObligations as getObligationsDb,
   releaseObligation as releaseObligationDb,
 } from "@/repositories/obligationsRepository";
@@ -17,6 +19,15 @@ export const getObligations = createServerFn({
   requireInviteGroupId();
   return getObligationsDb();
 });
+
+export const createObligation = createServerFn({
+  method: "POST",
+})
+  .validator(createObligationSchema)
+  .handler(async ({ data: { name, inviteeId } }) => {
+    requireInviteGroupId();
+    return createObligationDb({ name, inviteeId });
+  });
 
 export const claimObligation = createServerFn({
   method: "POST",

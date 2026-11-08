@@ -1,5 +1,6 @@
 import { Card } from "@/ui/card";
 
+import { CreateObligationForm } from "./CreateObligationForm";
 import { ObligationRow, type ObligationWithInvitee } from "./ObligationRow";
 
 interface ObligationListProps {
@@ -27,5 +28,6 @@ export const ObligationList = ({
         ))}
       </ul>
     )}
+    <CreateObligationForm inviteeId={inviteeId} />
   </Card>
 );

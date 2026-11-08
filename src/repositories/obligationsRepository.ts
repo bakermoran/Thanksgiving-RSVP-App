@@ -9,6 +9,19 @@ export function getObligations() {
   });
 }
 
+export function createObligation({
+  name,
+  inviteeId,
+}: {
+  inviteeId: number | null;
+  name: string;
+}) {
+  return db.insert(obligationsTable).values({
+    name,
+    inviteeId,
+  });
+}
+
 export function getObligationsForInviteGroup(inviteGroupId: number) {
   return db.query.obligationsTable.findMany({
     where: { invitee: { inviteGroupId } },
