@@ -1,6 +1,7 @@
-import { Bunting } from "@/components/Bunting";
-import { FallingLeaves } from "@/components/FallingLeaves";
-import { NotFound } from "@/components/NotFound";
+import { Bunting } from "@/features/layout/components/Bunting";
+import { FallingLeaves } from "@/features/layout/components/FallingLeaves";
+import { Footer } from "@/features/layout/components/Footer";
+import { NotFound } from "@/features/layout/components/NotFound";
 import {
   HeadContent,
   Outlet,
@@ -60,11 +61,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <FallingLeaves />
         <Bunting />
         <div className="relative z-10 flex-1 overflow-x-clip">{children}</div>
-        <footer className="relative z-10 flex items-center justify-center gap-2 py-6 text-sm font-medium text-cocoa">
-          <img src="/images/pie.svg" alt="" className="h-6" />
-          Made with extra gravy
-          <img src="/images/pie.svg" alt="" className="h-6" />
-        </footer>
+        <Footer />
         <Scripts />
       </body>
     </html>

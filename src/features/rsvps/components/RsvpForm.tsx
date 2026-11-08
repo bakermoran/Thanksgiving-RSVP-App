@@ -1,10 +1,11 @@
 import type { Invitee } from "@/db/schema/invitee";
 import { saveRsvpsSchema } from "@/db/schema/rsvp";
 import { saveRsvps } from "@/features/rsvps/rsvps.functions";
-import { Alert } from "@/features/ui/alert";
-import { Button } from "@/features/ui/button";
-import { Form } from "@/features/ui/form";
-import { Radio } from "@/features/ui/radio";
+import { Alert } from "@/ui/alert";
+import { Button } from "@/ui/button";
+import { Fieldset } from "@/ui/fieldset";
+import { Form } from "@/ui/form";
+import { RadioCard } from "@/ui/radio-card";
 import { useForm } from "@tanstack/react-form-start";
 import { useState } from "react";
 
@@ -56,39 +57,26 @@ export const RsvpForm = ({
       {invitees.map((invitee, index) => (
         <form.Field key={invitee.id} name={`rsvps[${index}].isAttending`}>
           {(field) => (
-            <fieldset className="rounded-3xl border-3 border-bark bg-white/70 px-4 pt-2 pb-4 sm:px-5">
-              <legend className="-ml-1 rounded-full border-3 border-bark bg-mustard px-4 py-0.5 text-lg font-bold shadow-chunky-sm">
-                {invitee.firstName} {invitee.lastName}
-              </legend>
+            <Fieldset legend={`${invitee.firstName} ${invitee.lastName}`}>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <label className={optionClass("has-checked:bg-olive")}>
-                  <Radio
-                    name={`invitee-${invitee.id}`}
-                    checked={field.state.value === true}
-                    onChange={() => field.handleChange(true)}
-                  />
-                  <span className="flex-1">Attending</span>
-                  <img
-                    src="/images/drumstick.svg"
-                    alt=""
-                    className="size-9 group-has-checked:motion-safe:animate-bob"
-                  />
-                </label>
-                <label className={optionClass("has-checked:bg-cranberry")}>
-                  <Radio
-                    name={`invitee-${invitee.id}`}
-                    checked={field.state.value === false}
-                    onChange={() => field.handleChange(false)}
-                  />
-                  <span className="flex-1">Not attending</span>
-                  <img
-                    src="/images/oak-leaf.svg"
-                    alt=""
-                    className="h-9 group-has-checked:motion-safe:animate-bob"
-                  />
-                </label>
+                <RadioCard
+                  label="Attending"
+                  tone="olive"
+                  icon="drumstick"
+                  name={`invitee-${invitee.id}`}
+                  checked={field.state.value === true}
+                  onChange={() => field.handleChange(true)}
+                />
+                <RadioCard
+                  label="Not attending"
+                  tone="cranberry"
+                  icon="oak-leaf"
+                  name={`invitee-${invitee.id}`}
+                  checked={field.state.value === false}
+                  onChange={() => field.handleChange(false)}
+                />
               </div>
-            </fieldset>
+            </Fieldset>
           )}
         </form.Field>
       ))}
@@ -110,6 +98,7 @@ export const RsvpForm = ({
             )}
             <Button
               type="submit"
+              size="lg"
               disabled={isSubmitting}
               className="w-full sm:ml-auto sm:flex sm:w-fit"
             >
@@ -121,12 +110,3 @@ export const RsvpForm = ({
     </Form>
   );
 };
-
-const optionClass = (checkedBg: string) =>
-  [
-    "group flex cursor-pointer items-center gap-3 rounded-2xl border-3 border-bark bg-cream px-4 py-3 text-lg font-semibold shadow-chunky-sm transition",
-    "hover:-translate-y-0.5 hover:bg-parchment",
-    "has-checked:translate-x-[2px] has-checked:translate-y-[2px] has-checked:text-cream has-checked:shadow-none",
-    "has-focus-visible:ring-4 has-focus-visible:ring-mustard",
-    checkedBg,
-  ].join(" ");

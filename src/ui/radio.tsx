@@ -1,4 +1,4 @@
-import { cn } from "../../utils/ui/cn";
+import { cn } from "./cn";
 
 type RadioProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 

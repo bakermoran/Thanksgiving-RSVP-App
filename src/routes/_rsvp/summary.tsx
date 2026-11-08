@@ -1,7 +1,8 @@
-import { ResponseBadge } from "@/features/rsvps/components/ResponseBadge";
+import { EventRsvpCard } from "@/features/rsvps/components/EventRsvpCard";
 import { getMyRsvps } from "@/features/rsvps/rsvps.functions";
-import { Card } from "@/features/ui/card";
-import { Link } from "@/features/ui/link";
+import { Illustration } from "@/ui/illustration";
+import { Link } from "@/ui/link";
+import { PageHeader } from "@/ui/page-header";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 const rsvpLayout = getRouteApi("/_rsvp");
@@ -12,84 +13,44 @@ export const Route = createFileRoute("/_rsvp/summary")({
   component: Summary,
 });
 
-const rsvpKey = (eventId: number, inviteeId: number) =>
-  `${eventId}:${inviteeId}`;
-
 function Summary() {
   const { inviteGroup, events } = rsvpLayout.useLoaderData();
   const rsvps = Route.useLoaderData();
 
-  const responses = new Map<string, boolean>(
-    rsvps.map((r) => [rsvpKey(r.eventId, r.inviteeId), r.isAttending]),
-  );
+  const responsesFor = (eventId: number) =>
+    new Map(
+      rsvps
+        .filter((r) => r.eventId === eventId)
+        .map((r) => [r.inviteeId, r.isAttending]),
+    );
 
   return (
     <div>
-      <header className="mb-10 text-center">
-        <img
-          src="/images/pie.svg"
-          alt=""
-          className="mx-auto w-36 motion-safe:animate-wobble"
-        />
-        <p className="eyebrow mt-3">Here's what's cookin'</p>
-        <h1 className="title-retro mt-2 text-6xl">Your RSVPs</h1>
-      </header>
+      <PageHeader
+        illustration={
+          <Illustration name="pie" animate="wobble" className="mx-auto w-36" />
+        }
+        eyebrow="Here's what's cookin'"
+        title="Your RSVPs"
+      />
 
-      <Link to="/summary">Back</Link>
-
-      <Link to="/obligations">View recipes</Link>
+      <div className="mb-12 flex justify-center">
+        <Link to="/recipes" className="-rotate-1 text-lg hover:rotate-0">
+          <Illustration name="drumstick" className="h-6" />
+          Who's bringing what?
+          <span aria-hidden>→</span>
+        </Link>
+      </div>
 
       <div className="space-y-8">
         {events.map((event, i) => (
-          <Card
+          <EventRsvpCard
             key={event.id}
-            className={i % 2 ? "rotate-[0.6deg]" : "-rotate-[0.6deg]"}
-          >
-            <section>
-              <div className="mb-4 flex items-start justify-between gap-4">
-                <h2 className="font-display text-3xl leading-tight text-cocoa">
-                  {event.name}
-                </h2>
-                <img
-                  src={
-                    i % 2 ? "/images/oak-leaf.svg" : "/images/maple-leaf.svg"
-                  }
-                  alt=""
-                  className="w-10 shrink-0 rotate-12"
-                />
-              </div>
-              <ul className="mb-5">
-                {inviteGroup.invitees.map((invitee) => {
-                  const isAttending = responses.get(
-                    rsvpKey(event.id, invitee.id),
-                  );
-                  return (
-                    <li
-                      key={invitee.id}
-                      className="flex items-center gap-3 border-b-2 border-dashed border-harvest/40 py-2 text-lg font-medium last:border-b-0"
-                    >
-                      <img
-                        src="/images/acorn.svg"
-                        alt=""
-                        className="h-5 shrink-0"
-                      />
-                      <span className="flex-1">
-                        {invitee.firstName} {invitee.lastName}
-                      </span>
-                      <ResponseBadge isAttending={isAttending} />
-                    </li>
-                  );
-                })}
-              </ul>
-              <Link
-                to="/events/$eventId"
-                params={{ eventId: event.id }}
-                className="inline-flex items-center gap-2 rounded-full border-3 border-bark bg-mustard px-5 py-1.5 font-bold shadow-chunky-sm transition hover:-translate-y-0.5 hover:bg-pumpkin hover:text-cream active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-              >
-                <span aria-hidden>✎</span> Edit
-              </Link>
-            </section>
-          </Card>
+            event={event}
+            invitees={inviteGroup.invitees}
+            responses={responsesFor(event.id)}
+            tilt={i % 2 ? "right" : "left"}
+          />
         ))}
       </div>
     </div>

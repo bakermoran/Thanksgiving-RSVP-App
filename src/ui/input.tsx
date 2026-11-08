@@ -1,4 +1,4 @@
-import { cn } from "../../utils/ui/cn";
+import { cn } from "./cn";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 

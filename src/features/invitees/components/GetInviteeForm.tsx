@@ -1,10 +1,9 @@
 import { getInviteeSchema } from "@/db/schema/invitee";
 import { getInvitee } from "@/features/invitees/invitees.functions";
-import { Alert, fieldErrorClass } from "@/features/ui/alert";
-import { Button } from "@/features/ui/button";
-import { Form } from "@/features/ui/form";
-import { Input } from "@/features/ui/input";
-import { Label } from "@/features/ui/label";
+import { Alert } from "@/ui/alert";
+import { Button } from "@/ui/button";
+import { Form } from "@/ui/form";
+import { TextField } from "@/ui/text-field";
 import { useForm } from "@tanstack/react-form";
 import { isNotFound } from "@tanstack/react-router";
 import { useState } from "react";
@@ -54,23 +53,15 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
         validators={{ onBlur: getInviteeSchema.shape.firstName }}
       >
         {(field) => (
-          <div>
-            <Label htmlFor={field.name}>First name</Label>
-            <Input
-              id={field.name}
-              name={field.name}
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              aria-invalid={field.state.meta.errors.length > 0}
-            />
-
-            {field.state.meta.errors.map((error) => (
-              <p key={error?.message} role="alert" className={fieldErrorClass}>
-                {error?.message}
-              </p>
-            ))}
-          </div>
+          <TextField
+            label="First name"
+            id={field.name}
+            name={field.name}
+            value={field.state.value}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={field.state.meta.errors}
+          />
         )}
       </form.Field>
 
@@ -79,24 +70,15 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
         validators={{ onBlur: getInviteeSchema.shape.lastName }}
       >
         {(field) => (
-          <div>
-            <Label htmlFor={field.name}>Last name</Label>
-            <Input
-              id={field.name}
-              name={field.name}
-              type="text"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              aria-invalid={field.state.meta.errors.length > 0}
-            />
-
-            {field.state.meta.errors.map((error) => (
-              <p key={error?.message} role="alert" className={fieldErrorClass}>
-                {error?.message}
-              </p>
-            ))}
-          </div>
+          <TextField
+            label="Last name"
+            id={field.name}
+            name={field.name}
+            value={field.state.value}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={field.state.meta.errors}
+          />
         )}
       </form.Field>
 
@@ -108,6 +90,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
         {([canSubmit, isSubmitting]) => (
           <Button
             type="submit"
+            size="lg"
             disabled={!canSubmit || isSubmitting}
             className="w-full"
           >

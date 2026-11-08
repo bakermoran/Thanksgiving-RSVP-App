@@ -1,4 +1,4 @@
-import { cn } from "../../utils/ui/cn";
+import { cn } from "./cn";
 
 type AlertProps = React.HTMLAttributes<HTMLParagraphElement>;
 
@@ -19,6 +19,3 @@ export const Alert = ({ className, children, ...props }: AlertProps) => {
     </p>
   );
 };
-
-/** Inline error under a single field. */
-export const fieldErrorClass = "mt-1.5 text-sm font-semibold text-cranberry";
