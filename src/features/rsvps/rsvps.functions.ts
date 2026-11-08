@@ -24,6 +24,13 @@ export const getEventRsvps = createServerFn({
     return { event, rsvps };
   });
 
+export const getMyRsvps = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const inviteGroupId = requireInviteGroupId();
+  return getRsvpsForInviteGroup(inviteGroupId);
+});
+
 export const saveRsvps = createServerFn({
   method: "POST",
 })

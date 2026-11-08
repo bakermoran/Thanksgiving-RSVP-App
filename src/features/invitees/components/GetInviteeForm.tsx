@@ -1,5 +1,6 @@
 import { getInviteeSchema } from "@/db/schema/invitee";
 import { getInvitee } from "@/features/invitees/invitees.functions";
+import { Alert, fieldErrorClass } from "@/features/ui/alert";
 import { Button } from "@/features/ui/button";
 import { Form } from "@/features/ui/form";
 import { Input } from "@/features/ui/input";
@@ -47,7 +48,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
   });
 
   return (
-    <Form form={form}>
+    <Form form={form} className="space-y-6">
       <form.Field
         name="firstName"
         validators={{ onBlur: getInviteeSchema.shape.firstName }}
@@ -65,7 +66,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
             />
 
             {field.state.meta.errors.map((error) => (
-              <p key={error?.message} role="alert">
+              <p key={error?.message} role="alert" className={fieldErrorClass}>
                 {error?.message}
               </p>
             ))}
@@ -91,7 +92,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
             />
 
             {field.state.meta.errors.map((error) => (
-              <p key={error?.message} role="alert">
+              <p key={error?.message} role="alert" className={fieldErrorClass}>
                 {error?.message}
               </p>
             ))}
@@ -99,13 +100,17 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
         )}
       </form.Field>
 
-      {lookupError && <p role="alert">{lookupError}</p>}
+      {lookupError && <Alert>{lookupError}</Alert>}
 
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
       >
         {([canSubmit, isSubmitting]) => (
-          <Button type="submit" disabled={!canSubmit || isSubmitting}>
+          <Button
+            type="submit"
+            disabled={!canSubmit || isSubmitting}
+            className="w-full"
+          >
             {isSubmitting ? "Searching..." : "Search"}
           </Button>
         )}

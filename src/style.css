@@ -1,1 +1,141 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Lobster", "Brush Script MT", cursive;
+  --font-slab: "Rye", Georgia, serif;
+  --font-body: "Fredoka", ui-rounded, system-ui, sans-serif;
+
+  --color-cream: #fdf3dc;
+  --color-parchment: #f7e6c0;
+  --color-cranberry: #a3262a;
+  --color-cranberry-dark: #7a1a1e;
+  --color-pumpkin: #e2702a;
+  --color-mustard: #f0b23b;
+  --color-harvest: #c9852f;
+  --color-olive: #6f7f2f;
+  --color-olive-dark: #55621f;
+  --color-cocoa: #7a4a2a;
+  --color-bark: #3d2314;
+
+  --shadow-chunky: 6px 6px 0 0 var(--color-bark);
+  --shadow-chunky-sm: 3px 3px 0 0 var(--color-bark);
+
+  --animate-wobble: wobble 3s ease-in-out infinite;
+  --animate-leaf-fall: leaf-fall 16s linear infinite;
+  --animate-bob: bob 2.4s ease-in-out infinite;
+
+  @keyframes wobble {
+    0%,
+    100% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(4deg);
+    }
+  }
+
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-6deg);
+    }
+    50% {
+      transform: translateY(-4px) rotate(6deg);
+    }
+  }
+
+  @keyframes leaf-fall {
+    0% {
+      transform: translate3d(0, -15vh, 0) rotate(0deg);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.9;
+    }
+    25% {
+      transform: translate3d(40px, 18vh, 0) rotate(90deg);
+    }
+    50% {
+      transform: translate3d(-30px, 50vh, 0) rotate(200deg);
+    }
+    75% {
+      transform: translate3d(35px, 82vh, 0) rotate(290deg);
+    }
+    92% {
+      opacity: 0.9;
+    }
+    100% {
+      transform: translate3d(-10px, 115vh, 0) rotate(380deg);
+      opacity: 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-gingham font-body text-bark antialiased;
+  }
+
+  ::selection {
+    background: var(--color-mustard);
+    color: var(--color-bark);
+  }
+}
+
+/* Picnic-blanket gingham */
+@utility bg-gingham {
+  background-color: var(--color-cream);
+  background-image:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-pumpkin) 16%, transparent) 50%,
+      transparent 50%
+    ),
+    linear-gradient(
+      color-mix(in oklab, var(--color-pumpkin) 16%, transparent) 50%,
+      transparent 50%
+    );
+  background-size: 56px 56px;
+}
+
+/* Grandma's recipe card ruled lines */
+@utility paper-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 31px,
+    color-mix(in oklab, var(--color-harvest) 22%, transparent) 31px 32px
+  );
+}
+
+/* Polka dots for bunting flags */
+@utility polka {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, white 55%, transparent) 2px,
+    transparent 2.5px
+  );
+  background-size: 10px 10px;
+}
+
+/* Big retro diner-sign headline */
+@utility title-retro {
+  font-family: var(--font-display);
+  color: var(--color-cranberry);
+  line-height: 1.05;
+  text-shadow:
+    3px 3px 0 var(--color-mustard),
+    6px 6px 0 var(--color-bark);
+}
+
+/* Little circus-poster label above headlines */
+@utility eyebrow {
+  font-family: var(--font-slab);
+  color: var(--color-pumpkin);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: var(--text-sm);
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100" role="img" aria-label="An acorn">
+  <g stroke="#3d2314" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M16 42 Q16 84 40 94 Q64 84 64 42 Z" fill="#c9852f"/>
+    <path d="M26 54 q0 18 8 28" fill="none" stroke="#fdf3dc" stroke-width="4" opacity="0.6"/>
+    <path d="M38 20 q0 -10 9 -15" fill="none" stroke-width="5"/>
+    <path d="M8 44 Q8 18 40 16 Q72 18 72 44 Q40 52 8 44 Z" fill="#7a4a2a"/>
+    <path d="M18 26 L40 46 M30 19 L58 44 M46 17 L68 36 M62 24 L36 47 M50 18 L20 44 M34 18 L12 36" fill="none" stroke="#5a3420" stroke-width="2"/>
+  </g>
+</svg>

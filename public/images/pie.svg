@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 160" role="img" aria-label="A pumpkin pie with whipped cream">
+  <g stroke="#3d2314" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <g fill="none" stroke="#7a4a2a" stroke-width="4" opacity="0.6">
+      <path d="M80 42 q-8 -8 0 -16 q8 -8 0 -16"/>
+      <path d="M140 42 q-8 -8 0 -16 q8 -8 0 -16"/>
+    </g>
+    <path d="M22 88 L42 136 Q110 156 178 136 L198 88 Z" fill="#cfc8bb"/>
+    <path d="M60 96 L66 142 M88 100 L90 148 M116 100 L114 150 M144 98 L140 146 M170 94 L162 140" stroke="#9e968a" stroke-width="3"/>
+    <ellipse cx="110" cy="86" rx="92" ry="30" fill="#e9b26a"/>
+    <g fill="#e9b26a" stroke-width="3">
+      <circle cx="194.0" cy="86.0" r="9"/><circle cx="190.6" cy="93.3" r="9"/><circle cx="180.7" cy="100.1" r="9"/>
+      <circle cx="165.0" cy="105.6" r="9"/><circle cx="144.9" cy="109.7" r="9"/><circle cx="122.0" cy="111.7" r="9"/>
+      <circle cx="98.0" cy="111.7" r="9"/><circle cx="75.1" cy="109.7" r="9"/><circle cx="55.0" cy="105.6" r="9"/>
+      <circle cx="39.3" cy="100.1" r="9"/><circle cx="29.4" cy="93.3" r="9"/><circle cx="26.0" cy="86.0" r="9"/>
+      <circle cx="29.4" cy="78.7" r="9"/><circle cx="39.3" cy="71.9" r="9"/><circle cx="55.0" cy="66.4" r="9"/>
+      <circle cx="75.1" cy="62.3" r="9"/><circle cx="98.0" cy="60.3" r="9"/><circle cx="122.0" cy="60.3" r="9"/>
+      <circle cx="144.9" cy="62.3" r="9"/><circle cx="165.0" cy="66.4" r="9"/><circle cx="180.7" cy="71.9" r="9"/>
+      <circle cx="190.6" cy="78.7" r="9"/>
+    </g>
+    <ellipse cx="110" cy="86" rx="76" ry="22" fill="#d9622a"/>
+    <path d="M60 84 q20 -10 40 -8" fill="none" stroke="#fdf3dc" stroke-width="4" opacity="0.5"/>
+    <ellipse cx="110" cy="80" rx="28" ry="10" fill="#fffaf0"/>
+    <ellipse cx="110" cy="70" rx="21" ry="9" fill="#fffaf0"/>
+    <ellipse cx="110" cy="61" rx="14" ry="7" fill="#fffaf0"/>
+    <path d="M104 56 q6 -16 10 -14 q2 6 -2 14 z" fill="#fffaf0"/>
+  </g>
+</svg>

@@ -5,7 +5,7 @@ import { and, eq, sql } from "drizzle-orm";
 
 export async function getRsvpsForInviteGroup(
   inviteGroupId: number,
-  eventId: number,
+  eventId?: number,
 ) {
   return db
     .select({
@@ -18,7 +18,7 @@ export async function getRsvpsForInviteGroup(
     .where(
       and(
         eq(inviteesTable.inviteGroupId, inviteGroupId),
-        eq(rsvpsTable.eventId, eventId),
+        eventId === undefined ? undefined : eq(rsvpsTable.eventId, eventId),
       ),
     );
 }

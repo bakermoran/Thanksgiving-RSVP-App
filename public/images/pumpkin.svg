@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" role="img" aria-label="A smiling cartoon pumpkin">
+  <g stroke="#3d2314" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M58 40 q22 -24 46 2 q-24 20 -46 -2 z" fill="#6f7f2f"/>
+    <path d="M62 40 q20 -2 40 2" fill="none" stroke-width="3"/>
+    <path d="M112 34 c18 -14 42 -4 34 12 c-6 10 -20 4 -14 -6" fill="none" stroke="#6f7f2f" stroke-width="5"/>
+    <path d="M94 50 C92 32 98 18 112 12 L118 22 C110 26 108 36 110 50 Z" fill="#6f7f2f"/>
+    <ellipse cx="58" cy="112" rx="46" ry="56" fill="#cf5d24"/>
+    <ellipse cx="142" cy="112" rx="46" ry="56" fill="#cf5d24"/>
+    <ellipse cx="100" cy="112" rx="46" ry="62" fill="#e2702a"/>
+    <path d="M30 86 q-6 22 2 46" fill="none" stroke="#fdf3dc" stroke-width="5" opacity="0.5"/>
+    <path d="M80 70 q-8 16 -6 34" fill="none" stroke="#fdf3dc" stroke-width="5" opacity="0.5"/>
+    <ellipse cx="86" cy="106" rx="5" ry="8" fill="#3d2314" stroke="none"/>
+    <ellipse cx="114" cy="106" rx="5" ry="8" fill="#3d2314" stroke="none"/>
+    <circle cx="74" cy="124" r="7" fill="#f0b23b" stroke="none" opacity="0.8"/>
+    <circle cx="126" cy="124" r="7" fill="#f0b23b" stroke="none" opacity="0.8"/>
+    <path d="M88 126 q12 12 24 0" fill="none"/>
+  </g>
+</svg>

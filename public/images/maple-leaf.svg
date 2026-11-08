@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="A maple leaf">
+  <g stroke="#3d2314" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M50 4 L57 24 L68 17 L65 40 L82 29 L78 42 L95 45 L82 55 L88 62 L65 62 L68 75 L53 68 L51 95 L49 95 L47 68 L32 75 L35 62 L12 62 L18 55 L5 45 L22 42 L18 29 L35 40 L32 17 L43 24 Z" fill="#e2702a"/>
+    <path d="M50 92 V20 M50 64 L28 48 M50 64 L72 48 M50 52 L36 30 M50 52 L64 30" fill="none" stroke="#a3262a" stroke-width="2.5"/>
+  </g>
+</svg>
