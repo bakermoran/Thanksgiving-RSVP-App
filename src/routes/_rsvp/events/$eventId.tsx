@@ -1,3 +1,4 @@
+import type { Event } from "@/db/schema/event";
 import { EventProgress } from "@/features/events/components/EventProgress";
 import { RsvpForm } from "@/features/rsvps/components/RsvpForm";
 import { getEventRsvps } from "@/features/rsvps/rsvps.functions";
@@ -6,6 +7,7 @@ import { Illustration } from "@/ui/illustration";
 import { Link } from "@/ui/link";
 import { PageHeader } from "@/ui/page-header";
 import { mapsLink, toAddressString } from "@/utils/address";
+import { formatEventTime } from "@/utils/date";
 import {
   createFileRoute,
   getRouteApi,
@@ -26,6 +28,22 @@ export const Route = createFileRoute("/_rsvp/events/$eventId")({
   gcTime: 0,
   component: EventPage,
 });
+
+const EventDetail = ({ event }: { event: Event }) => {
+  return (
+    <h3 className="text-cocoa  mt-2 text-md font-bold">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-bark"
+        href={mapsLink(event)}
+      >
+        {toAddressString(event)}
+      </a>
+      <p>{formatEventTime(event.time)}</p>
+    </h3>
+  );
+};
 
 function EventPage() {
   const navigate = useNavigate();
@@ -50,11 +68,7 @@ function EventPage() {
         illustration={<EventProgress count={events.length} current={index} />}
         eyebrow={`Event ${index + 1} of ${events.length}`}
         title={event.name}
-        detail={
-          <a target="_blank" rel="noopener noreferrer" href={mapsLink(event)}>
-            {toAddressString(event)}
-          </a>
-        }
+        detail={<EventDetail event={event} />}
         size="md"
       />
 
