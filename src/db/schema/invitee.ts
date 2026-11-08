@@ -20,6 +20,18 @@ export const inviteesTable = sqliteTable(
   ],
 );
 
+export const inviteeAliasesTable = sqliteTable(
+  "invitee_aliases",
+  {
+    ...baseColumns,
+    inviteeId: int("invitee_id")
+      .notNull()
+      .references(() => inviteesTable.id, { onDelete: "cascade" }),
+    alias: text("alias").notNull(),
+  },
+  (table) => [index("idx_invitee_aliases_alias").on(table.alias)],
+);
+
 export const inviteeSchema = createSelectSchema(inviteesTable);
 export type Invitee = z.infer<typeof inviteeSchema>;
 
