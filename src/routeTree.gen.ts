@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RsvpRouteImport } from './routes/_rsvp'
+import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RsvpHomeRouteImport } from './routes/_rsvp/home'
 import { Route as RsvpRsvpRouteImport } from './routes/_rsvp/rsvp'
 import { Route as RsvpEventsEventIdRouteImport } from './routes/_rsvp/events/$eventId'
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const RsvpRoute = RsvpRouteImport.update({
   id: '/_rsvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedeemRoute = RedeemRouteImport.update({
+  id: '/redeem',
+  path: '/redeem',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RsvpHomeRoute = RsvpHomeRouteImport.update({
@@ -42,12 +48,14 @@ const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/redeem': typeof RedeemRoute
   '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/redeem': typeof RedeemRoute
   '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
@@ -56,19 +64,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_rsvp': typeof RsvpRouteWithChildren
+  '/redeem': typeof RedeemRoute
   '/_rsvp/home': typeof RsvpHomeRoute
   '/_rsvp/rsvp': typeof RsvpRsvpRoute
   '/_rsvp/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/rsvp' | '/events/$eventId'
+  fullPaths: '/' | '/redeem' | '/home' | '/rsvp' | '/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/rsvp' | '/events/$eventId'
+  to: '/' | '/redeem' | '/home' | '/rsvp' | '/events/$eventId'
   id:
     | '__root__'
     | '/'
     | '/_rsvp'
+    | '/redeem'
     | '/_rsvp/home'
     | '/_rsvp/rsvp'
     | '/_rsvp/events/$eventId'
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RsvpRoute: typeof RsvpRouteWithChildren
+  RedeemRoute: typeof RedeemRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof RsvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redeem': {
+      id: '/redeem'
+      path: '/redeem'
+      fullPath: '/redeem'
+      preLoaderRoute: typeof RedeemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_rsvp/home': {
@@ -136,6 +154,7 @@ const RsvpRouteWithChildren = RsvpRoute._addFileChildren(RsvpRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RsvpRoute: RsvpRouteWithChildren,
+  RedeemRoute: RedeemRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

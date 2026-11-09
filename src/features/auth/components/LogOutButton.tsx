@@ -13,7 +13,7 @@ export const LogOutButton = ({ name }: { name: string }) => {
 
   return (
     <Button variant="ghost" size="sm" onClick={onClick}>
-      Not ${name}?
+      Not {name}?
     </Button>
   );
 };

@@ -1,0 +1,101 @@
+import { createInviteeSchema } from "@/db/schema/invitee";
+import { redeemInvite } from "@/features/invite/invite.functions";
+import { Alert } from "@/ui/alert";
+import { Button } from "@/ui/button";
+import { Form } from "@/ui/form";
+import { TextField } from "@/ui/text-field";
+import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
+
+interface CreateInviteeFormProps {
+  onSubmit: () => void;
+  code: string;
+}
+
+export const CreateInviteeForm = ({
+  onSubmit,
+  code,
+}: CreateInviteeFormProps) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const form = useForm({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
+
+    validators: {
+      onSubmit: createInviteeSchema,
+    },
+
+    listeners: {
+      onChange: () => setError(null),
+    },
+
+    onSubmit: async ({ value }) => {
+      setError(null);
+      try {
+        await redeemInvite({ data: { code, invitee: value } });
+        onSubmit();
+      } catch (error) {
+        console.error(error);
+        setError("Something went wrong. Please try again.");
+      }
+    },
+  });
+
+  return (
+    <Form form={form} className="space-y-6">
+      <form.Field
+        name="firstName"
+        validators={{ onBlur: createInviteeSchema.shape.firstName }}
+      >
+        {(field) => (
+          <TextField
+            label="First name"
+            id={field.name}
+            name={field.name}
+            value={field.state.value}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={field.state.meta.errors}
+          />
+        )}
+      </form.Field>
+
+      <form.Field
+        name="lastName"
+        validators={{ onBlur: createInviteeSchema.shape.lastName }}
+      >
+        {(field) => (
+          <TextField
+            label="Last name"
+            id={field.name}
+            name={field.name}
+            value={field.state.value}
+            onChange={field.handleChange}
+            onBlur={field.handleBlur}
+            errors={field.state.meta.errors}
+          />
+        )}
+      </form.Field>
+
+      {error && <Alert>{error}</Alert>}
+
+      <form.Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+      >
+        {([canSubmit, isSubmitting]) => (
+          <Button
+            type="submit"
+            size="lg"
+            disabled={!canSubmit || isSubmitting}
+            className="w-full"
+          >
+            Join
+          </Button>
+        )}
+      </form.Subscribe>
+    </Form>
+  );
+};

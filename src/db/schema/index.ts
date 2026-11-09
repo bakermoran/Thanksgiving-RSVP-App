@@ -1,4 +1,5 @@
 import { eventsTable } from "@/db/schema/event";
+import { inviteTable } from "@/db/schema/invite";
 import { inviteGroupsTable } from "@/db/schema/inviteGroup";
 import { inviteeAliasesTable, inviteesTable } from "@/db/schema/invitee";
 import { obligationsTable } from "@/db/schema/obligation";
@@ -11,4 +12,5 @@ export default {
   rsvpsTable,
   eventsTable,
   obligationsTable,
+  inviteTable,
 };

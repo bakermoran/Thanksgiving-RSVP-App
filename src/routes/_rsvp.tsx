@@ -1,6 +1,7 @@
 import { LogOutButton } from "@/features/auth/components/LogOutButton";
 import { requireSession } from "@/features/auth/guards";
 import { getEvents } from "@/features/events/events.functions";
+import { InviteButton } from "@/features/invite/InviteButton";
 import { getMyInviteGroup } from "@/features/inviteGroups/inviteeGroups.functions";
 import { RsvpBanner } from "@/features/rsvps/components/RsvpBanner";
 import { Page } from "@/ui/page";
@@ -26,8 +27,9 @@ function RsvpLayout() {
   return (
     <Page>
       <RsvpBanner />
-      <div className="mb-6 flex justify-center">
+      <div className="mb-6 flex justify-center gap-4">
         {me && <LogOutButton name={me.firstName} />}
+        <InviteButton />
       </div>
       <Outlet />
     </Page>

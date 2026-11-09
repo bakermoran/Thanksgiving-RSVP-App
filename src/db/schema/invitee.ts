@@ -39,3 +39,8 @@ export const getInviteeSchema = z.object({
   firstName: z.string().trim().min(1, "Enter your first name"),
   lastName: z.string().trim().min(1, "Enter your last name"),
 });
+
+export const createInviteeSchema = z.object({
+  firstName: z.string().trim().min(1, "Enter your first name"),
+  lastName: z.string().trim().min(1, "Enter your last name"),
+});
