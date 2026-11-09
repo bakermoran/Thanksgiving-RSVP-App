@@ -3,11 +3,12 @@ import { Button } from "@/ui/button";
 import { createInvite } from "./invite.functions";
 
 export const InviteButton = () => {
-  const redemptionUrl = "https://my-thanksgiving-event.com/redeem";
   const onClick = async () => {
     const { code } = await createInvite();
+    const redemptionUrl = new URL("/redeem", window.location.origin);
+    redemptionUrl.searchParams.set("code", code);
     window.open(
-      `sms:?body=Come to my Thanksgiving event: ${redemptionUrl}?code=${code}`,
+      `sms:?body=Come to my Thanksgiving event: ${encodeURIComponent(redemptionUrl.toString())}`,
     );
   };
 
