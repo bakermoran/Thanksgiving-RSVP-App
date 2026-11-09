@@ -58,7 +58,7 @@ function EventPage() {
     if (next) {
       navigate({ to: "/events/$eventId", params: { eventId: next.id } });
     } else {
-      navigate({ to: "/summary" });
+      navigate({ to: "/home" });
     }
   };
 

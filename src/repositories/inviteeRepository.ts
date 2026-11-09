@@ -20,3 +20,7 @@ export async function getInviteeByNameWithGroup({
     with: withGroup,
   });
 }
+
+export function getInvitee(id: number) {
+  return db.query.inviteesTable.findFirst({ where: { id } });
+}

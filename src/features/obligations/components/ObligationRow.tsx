@@ -35,6 +35,16 @@ export const ObligationRow = ({
     await router.invalidate();
   };
 
+  const nameInitial = invitee
+    ? `${invitee.firstName} ${invitee.lastName.slice(0, 1)}`
+    : "";
+
+  const whoClaimedIt = isMine
+    ? "You're on it!"
+    : invitee
+      ? `${nameInitial} has it covered`
+      : "Up for grabs";
+
   return (
     <ListItem className="gap-x-4 py-3">
       <div className="min-w-0 flex-1">
@@ -46,13 +56,7 @@ export const ObligationRow = ({
         >
           {obligation.name}
         </div>
-        <div className="text-sm text-cocoa">
-          {isMine
-            ? "You're on it!"
-            : invitee
-              ? `${invitee.firstName} has it covered`
-              : "Up for grabs"}
-        </div>
+        <div className="text-sm text-cocoa">{whoClaimedIt}</div>
       </div>
 
       {isMine ? (
@@ -63,7 +67,7 @@ export const ObligationRow = ({
           </Button>
         </div>
       ) : invitee ? (
-        <Badge>{invitee.firstName}</Badge>
+        <Badge>{nameInitial}</Badge>
       ) : (
         <Button size="sm" onClick={claim}>
           I'll bring it

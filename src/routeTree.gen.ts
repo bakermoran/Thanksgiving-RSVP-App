@@ -11,9 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RsvpRouteImport } from './routes/_rsvp'
-import { Route as RecipesRouteImport } from './routes/recipes'
+import { Route as RsvpHomeRouteImport } from './routes/_rsvp/home'
 import { Route as RsvpRsvpRouteImport } from './routes/_rsvp/rsvp'
-import { Route as RsvpSummaryRouteImport } from './routes/_rsvp/summary'
 import { Route as RsvpEventsEventIdRouteImport } from './routes/_rsvp/events/$eventId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -25,19 +24,14 @@ const RsvpRoute = RsvpRouteImport.update({
   id: '/_rsvp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RecipesRoute = RecipesRouteImport.update({
-  id: '/recipes',
-  path: '/recipes',
-  getParentRoute: () => rootRouteImport,
+const RsvpHomeRoute = RsvpHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => RsvpRoute,
 } as any)
 const RsvpRsvpRoute = RsvpRsvpRouteImport.update({
   id: '/rsvp',
   path: '/rsvp',
-  getParentRoute: () => RsvpRoute,
-} as any)
-const RsvpSummaryRoute = RsvpSummaryRouteImport.update({
-  id: '/summary',
-  path: '/summary',
   getParentRoute: () => RsvpRoute,
 } as any)
 const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
@@ -48,46 +42,41 @@ const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/recipes': typeof RecipesRoute
+  '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
-  '/summary': typeof RsvpSummaryRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/recipes': typeof RecipesRoute
+  '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
-  '/summary': typeof RsvpSummaryRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_rsvp': typeof RsvpRouteWithChildren
-  '/recipes': typeof RecipesRoute
+  '/_rsvp/home': typeof RsvpHomeRoute
   '/_rsvp/rsvp': typeof RsvpRsvpRoute
-  '/_rsvp/summary': typeof RsvpSummaryRoute
   '/_rsvp/events/$eventId': typeof RsvpEventsEventIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/recipes' | '/rsvp' | '/summary' | '/events/$eventId'
+  fullPaths: '/' | '/home' | '/rsvp' | '/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/recipes' | '/rsvp' | '/summary' | '/events/$eventId'
+  to: '/' | '/home' | '/rsvp' | '/events/$eventId'
   id:
     | '__root__'
     | '/'
     | '/_rsvp'
-    | '/recipes'
+    | '/_rsvp/home'
     | '/_rsvp/rsvp'
-    | '/_rsvp/summary'
     | '/_rsvp/events/$eventId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RsvpRoute: typeof RsvpRouteWithChildren
-  RecipesRoute: typeof RecipesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -106,25 +95,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RsvpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/recipes': {
-      id: '/recipes'
-      path: '/recipes'
-      fullPath: '/recipes'
-      preLoaderRoute: typeof RecipesRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_rsvp/home': {
+      id: '/_rsvp/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof RsvpHomeRouteImport
+      parentRoute: typeof RsvpRoute
     }
     '/_rsvp/rsvp': {
       id: '/_rsvp/rsvp'
       path: '/rsvp'
       fullPath: '/rsvp'
       preLoaderRoute: typeof RsvpRsvpRouteImport
-      parentRoute: typeof RsvpRoute
-    }
-    '/_rsvp/summary': {
-      id: '/_rsvp/summary'
-      path: '/summary'
-      fullPath: '/summary'
-      preLoaderRoute: typeof RsvpSummaryRouteImport
       parentRoute: typeof RsvpRoute
     }
     '/_rsvp/events/$eventId': {
@@ -138,14 +120,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface RsvpRouteChildren {
+  RsvpHomeRoute: typeof RsvpHomeRoute
   RsvpRsvpRoute: typeof RsvpRsvpRoute
-  RsvpSummaryRoute: typeof RsvpSummaryRoute
   RsvpEventsEventIdRoute: typeof RsvpEventsEventIdRoute
 }
 
 const RsvpRouteChildren: RsvpRouteChildren = {
+  RsvpHomeRoute: RsvpHomeRoute,
   RsvpRsvpRoute: RsvpRsvpRoute,
-  RsvpSummaryRoute: RsvpSummaryRoute,
   RsvpEventsEventIdRoute: RsvpEventsEventIdRoute,
 }
 
@@ -154,7 +136,6 @@ const RsvpRouteWithChildren = RsvpRoute._addFileChildren(RsvpRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RsvpRoute: RsvpRouteWithChildren,
-  RecipesRoute: RecipesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
