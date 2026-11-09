@@ -1,3 +1,5 @@
+import { LogOutButton } from "@/features/auth/components/LogOutButton";
+import { requireSession } from "@/features/auth/guards";
 import { getEvents } from "@/features/events/events.functions";
 import { getMyInviteGroup } from "@/features/inviteGroups/inviteeGroups.functions";
 import { RsvpBanner } from "@/features/rsvps/components/RsvpBanner";
@@ -5,6 +7,7 @@ import { Page } from "@/ui/page";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_rsvp")({
+  beforeLoad: requireSession,
   loader: async () => {
     const [inviteGroup, events] = await Promise.all([
       getMyInviteGroup(),
@@ -16,9 +19,16 @@ export const Route = createFileRoute("/_rsvp")({
 });
 
 function RsvpLayout() {
+  const { session } = Route.useRouteContext();
+  const { inviteGroup } = Route.useLoaderData();
+  const me = inviteGroup.invitees.find((i) => i.id === session.inviteeId);
+
   return (
     <Page>
       <RsvpBanner />
+      <div className="mb-6 flex justify-center">
+        {me && <LogOutButton name={me.firstName} />}
+      </div>
       <Outlet />
     </Page>
   );

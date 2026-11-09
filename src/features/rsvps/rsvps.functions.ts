@@ -1,6 +1,6 @@
 import { getEventSchema } from "@/db/schema/event";
 import { saveRsvpsSchema } from "@/db/schema/rsvp";
-import { requireInviteGroupId } from "@/features/inviteGroups/inviteGroupAccess";
+import { authMiddleware } from "@/features/auth/auth.middleware";
 import { getEvent } from "@/repositories/eventsRepository";
 import { getInviteGroup } from "@/repositories/inviteGroupRepository";
 import {
@@ -13,15 +13,14 @@ import { createServerFn } from "@tanstack/react-start";
 export const getEventRsvps = createServerFn({
   method: "GET",
 })
+  .middleware([authMiddleware])
   .validator(getEventSchema)
-  .handler(async ({ data }) => {
-    const inviteGroupId = requireInviteGroupId();
-
+  .handler(async ({ data, context: { session } }) => {
     const event = await getEvent(data.id);
     if (!event) throw notFound();
 
     const rsvps = await getRsvpsForInviteGroup({
-      inviteGroupId,
+      inviteGroupId: session.inviteGroupId,
       eventId: event.id,
     });
     return { event, rsvps };
@@ -29,21 +28,21 @@ export const getEventRsvps = createServerFn({
 
 export const getMyRsvps = createServerFn({
   method: "GET",
-}).handler(async () => {
-  const inviteGroupId = requireInviteGroupId();
-  return getRsvpsForInviteGroup({ inviteGroupId });
-});
+})
+  .middleware([authMiddleware])
+  .handler(async ({ context: { session } }) =>
+    getRsvpsForInviteGroup({ inviteGroupId: session.inviteGroupId }),
+  );
 
 export const saveRsvps = createServerFn({
   method: "POST",
 })
+  .middleware([authMiddleware])
   .validator(saveRsvpsSchema)
-  .handler(async ({ data }) => {
-    const inviteGroupId = requireInviteGroupId();
-
+  .handler(async ({ data, context: { session } }) => {
     const [event, inviteGroup] = await Promise.all([
       getEvent(data.eventId),
-      getInviteGroup(inviteGroupId),
+      getInviteGroup(session.inviteGroupId),
     ]);
     if (!event || !inviteGroup) throw notFound();
 

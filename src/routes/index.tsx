@@ -1,3 +1,4 @@
+import { redirectIfLoggedIn } from "@/features/auth/guards";
 import { GetInviteeForm } from "@/features/invitees/components/GetInviteeForm";
 import { HarvestRow } from "@/features/layout/components/HarvestRow";
 import { Card } from "@/ui/card";
@@ -7,10 +8,11 @@ import { PageHeader } from "@/ui/page-header";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: Home,
+  beforeLoad: redirectIfLoggedIn,
+  component: Landing,
 });
 
-function Home() {
+function Landing() {
   const navigate = useNavigate();
 
   return (

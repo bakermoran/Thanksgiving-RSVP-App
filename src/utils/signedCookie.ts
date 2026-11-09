@@ -1,4 +1,8 @@
-import { getCookie, setCookie } from "@tanstack/react-start/server";
+import {
+  deleteCookie,
+  getCookie,
+  setCookie,
+} from "@tanstack/react-start/server";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 const MAX_AGE = 60 * 60 * 24 * 60; // 60 days
@@ -12,9 +16,9 @@ function secret() {
 const sign = (value: string) =>
   createHmac("sha256", secret()).update(value).digest("base64url");
 
-export function setSignedIdCookie(name: string, id: number) {
-  const value = String(id);
-  setCookie(name, `${value}.${sign(value)}`, {
+export function setSignedCookie(name: string, value: string) {
+  const encoded = Buffer.from(value).toString("base64url");
+  setCookie(name, `${encoded}.${sign(encoded)}`, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -23,19 +27,22 @@ export function setSignedIdCookie(name: string, id: number) {
   });
 }
 
-export function getSignedIdCookie(name: string): number | null {
+export function getSignedCookie(name: string): string | null {
   const raw = getCookie(name);
   if (!raw) return null;
 
-  const [value, sig] = raw.split(".");
-  if (!value || !sig) return null;
+  const [encoded, sig, ...rest] = raw.split(".");
+  if (!encoded || !sig || rest.length) return null;
 
-  const expected = Buffer.from(sign(value));
+  const expected = Buffer.from(sign(encoded));
   const actual = Buffer.from(sig);
   if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) {
     return null;
   }
 
-  const id = Number(value);
-  return Number.isInteger(id) ? id : null;
+  return Buffer.from(encoded, "base64url").toString();
+}
+
+export function clearCookie(name: string) {
+  deleteCookie(name, { path: "/" });
 }

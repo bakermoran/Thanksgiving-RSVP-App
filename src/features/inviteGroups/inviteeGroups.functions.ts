@@ -1,16 +1,19 @@
+import { authMiddleware } from "@/features/auth/auth.middleware";
+import { clearSession } from "@/features/auth/session";
 import { getInviteGroup } from "@/repositories/inviteGroupRepository";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
-import { requireInviteGroupId } from "./inviteGroupAccess";
-
 export const getMyInviteGroup = createServerFn({
   method: "GET",
-}).handler(async () => {
-  const inviteGroupId = requireInviteGroupId();
+})
+  .middleware([authMiddleware])
+  .handler(async ({ context: { session } }) => {
+    const inviteGroup = await getInviteGroup(session.inviteGroupId);
+    if (!inviteGroup) {
+      clearSession();
+      throw redirect({ to: "/" });
+    }
 
-  const inviteGroup = await getInviteGroup(inviteGroupId);
-  if (!inviteGroup) throw redirect({ to: "/" });
-
-  return inviteGroup;
-});
+    return inviteGroup;
+  });

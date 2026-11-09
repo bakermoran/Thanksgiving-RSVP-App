@@ -1,9 +1,5 @@
 import { getInviteeSchema } from "@/db/schema/invitee";
-import { grantInviteGroupAccess } from "@/features/inviteGroups/inviteGroupAccess";
-import {
-  grantInviteeAccess,
-  requireInviteeId,
-} from "@/features/invitees/inviteeAccess";
+import { setSession } from "@/features/auth/session";
 import { getInviteeByNameWithGroup } from "@/repositories/inviteeRepository";
 import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
@@ -17,11 +13,6 @@ export const getInvitee = createServerFn({
 
     if (!invitee) throw notFound();
 
-    grantInviteGroupAccess(invitee.inviteGroupId);
-    grantInviteeAccess(invitee.id);
+    setSession({ inviteeId: invitee.id, inviteGroupId: invitee.inviteGroupId });
     return invitee;
   });
-
-export const getMyInviteeId = createServerFn({
-  method: "GET",
-}).handler(async () => requireInviteeId());
