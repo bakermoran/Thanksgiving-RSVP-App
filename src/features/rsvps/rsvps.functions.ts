@@ -1,7 +1,7 @@
 import { getEventSchema } from "@/db/schema/event";
 import { saveRsvpsSchema } from "@/db/schema/rsvp";
 import { authMiddleware } from "@/features/auth/auth.middleware";
-import { getEvent } from "@/repositories/eventsRepository";
+import { getEvent, getEvents } from "@/repositories/eventsRepository";
 import { getInviteGroup } from "@/repositories/inviteGroupRepository";
 import {
   getRsvpsForInviteGroup,
@@ -33,6 +33,24 @@ export const getMyRsvps = createServerFn({
   .handler(async ({ context: { session } }) =>
     getRsvpsForInviteGroup({ inviteGroupId: session.inviteGroupId }),
   );
+
+export const hasCompletedAllRsvps = createServerFn({
+  method: "GET",
+})
+  .middleware([authMiddleware])
+  .handler(async ({ context: { session } }) => {
+    const [events, inviteGroup, rsvps] = await Promise.all([
+      getEvents(),
+      getInviteGroup(session.inviteGroupId),
+      getRsvpsForInviteGroup({ inviteGroupId: session.inviteGroupId }),
+    ]);
+    if (!inviteGroup) return false;
+
+    const answered = new Set(rsvps.map((r) => `${r.eventId}:${r.inviteeId}`));
+    return events.every((event) =>
+      inviteGroup.invitees.every((i) => answered.has(`${event.id}:${i.id}`)),
+    );
+  });
 
 export const saveRsvps = createServerFn({
   method: "POST",
