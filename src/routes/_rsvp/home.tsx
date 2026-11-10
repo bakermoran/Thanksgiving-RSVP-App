@@ -1,7 +1,10 @@
 import { EventSummaryCard } from "@/features/home/components/EventSummaryCard";
 import { Stat } from "@/features/home/components/Stat";
 import { ObligationList } from "@/features/obligations/components/ObligationList";
-import { getObligations } from "@/features/obligations/obligations.functions";
+import {
+  getObligationCategories,
+  getObligations,
+} from "@/features/obligations/obligations.functions";
 import { getMyRsvps } from "@/features/rsvps/rsvps.functions";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
@@ -12,12 +15,13 @@ const rsvpLayout = getRouteApi("/_rsvp");
 
 export const Route = createFileRoute("/_rsvp/home")({
   loader: async () => {
-    const [obligations, rsvps] = await Promise.all([
+    const [obligations, categories, rsvps] = await Promise.all([
       getObligations(),
+      getObligationCategories(),
       getMyRsvps(),
     ]);
 
-    return { obligations, rsvps };
+    return { obligations, categories, rsvps };
   },
   gcTime: 0,
   component: Home,
@@ -38,7 +42,7 @@ const SectionHeading = ({
 
 function Home() {
   const { inviteGroup, events } = rsvpLayout.useLoaderData();
-  const { obligations, rsvps } = Route.useLoaderData();
+  const { obligations, categories, rsvps } = Route.useLoaderData();
   const { inviteeId } = Route.useRouteContext().session;
   const { invitees } = inviteGroup;
 
@@ -93,7 +97,10 @@ function Home() {
       </Card>
 
       <section>
-        <SectionHeading eyebrow="Mark your calendar" title="Your events" />
+        <SectionHeading
+          eyebrow="Mark your calendar"
+          title="Schedule of events"
+        />
         <div className="grid gap-8 sm:grid-cols-2">
           {events.map((event, i) => (
             <EventSummaryCard
@@ -109,10 +116,14 @@ function Home() {
 
       <section>
         <SectionHeading
-          eyebrow="Many hands, one feast"
+          eyebrow="What's on the menu"
           title="Who's bringing what"
         />
-        <ObligationList obligations={obligations} inviteeId={inviteeId} />
+        <ObligationList
+          obligations={obligations}
+          categories={categories}
+          inviteeId={inviteeId}
+        />
       </section>
     </div>
   );

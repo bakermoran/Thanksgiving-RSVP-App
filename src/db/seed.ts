@@ -4,7 +4,10 @@ import { db } from "./client";
 import { eventsTable } from "./schema/event";
 import { inviteGroupsTable } from "./schema/inviteGroup";
 import { inviteesTable } from "./schema/invitee";
-import { obligationsTable } from "./schema/obligation";
+import {
+  obligationCategoriesTable,
+  obligationsTable,
+} from "./schema/obligation";
 import { rsvpsTable } from "./schema/rsvp";
 
 const schema = {
@@ -12,6 +15,7 @@ const schema = {
   inviteGroupsTable,
   eventsTable,
   obligationsTable,
+  obligationCategoriesTable,
 };
 
 // Include rsvps in the reset so FK constraints don't block wiping invitees/events.
@@ -54,6 +58,15 @@ await seed(db, schema, { seed: 1 }).refine((f) => ({
     count: 10,
     columns: {
       name: f.loremIpsum({ sentencesCount: 1 }),
+      createdAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
+      updatedAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
+    },
+  },
+  obligationCategoriesTable: {
+    count: 3,
+    columns: {
+      name: f.loremIpsum({ sentencesCount: 1 }),
+      sortOrder: f.int({ minValue: 1, maxValue: 100, isUnique: true }),
       createdAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
       updatedAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
     },

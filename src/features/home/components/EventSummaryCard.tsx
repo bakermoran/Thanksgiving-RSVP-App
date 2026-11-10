@@ -6,7 +6,7 @@ import { Illustration } from "@/ui/illustration";
 import { Link } from "@/ui/link";
 import { ListItem } from "@/ui/list";
 import { mapsLink, toAddressString } from "@/utils/address";
-import { formatEventTime } from "@/utils/date";
+import { formatEventTimeRange } from "@/utils/date";
 
 interface EventSummaryCardProps {
   event: Event;
@@ -36,7 +36,7 @@ export const EventSummaryCard = ({
       </div>
 
       <p className="mt-1 text-sm font-bold text-cocoa">
-        {formatEventTime(event.startTime)} - {formatEventTime(event.endTime)}
+        {formatEventTimeRange(event.startTime, event.endTime)}
       </p>
       <a
         href={mapsLink(event)}

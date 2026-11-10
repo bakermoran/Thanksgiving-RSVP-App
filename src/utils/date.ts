@@ -1,15 +1,13 @@
-const parseSqliteDateTime = (value: string) =>
-  new Date(`${value.replace(" ", "T")}Z`);
+import { UTCDate } from "@date-fns/utc";
+import { format } from "date-fns";
 
-const eventTimeFormat = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-  year: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  timeZone: "UTC",
-});
+// SQLite stores "YYYY-MM-DD HH:MM:SS" in UTC;
+const parse = (value: string) => new UTCDate(`${value.replace(" ", "T")}Z`);
+const formatString = "MMM, d h:mm a  ";
 
-export const formatEventTime = (value: string) =>
-  eventTimeFormat.format(parseSqliteDateTime(value));
+export const formatEventTimeRange = (start: string, end: string) => {
+  const s = parse(start);
+  const e = parse(end);
+
+  return `${format(s, formatString)} – ${format(e, formatString)}`;
+};

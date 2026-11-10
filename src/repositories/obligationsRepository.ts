@@ -1,24 +1,37 @@
 import { db } from "@/db/client";
-import { obligationsTable } from "@/db/schema/obligation";
+import {
+  obligationCategoriesTable,
+  obligationsTable,
+} from "@/db/schema/obligation";
 import { and, eq, isNull } from "drizzle-orm";
 
 export function getObligations() {
   return db.query.obligationsTable.findMany({
     orderBy: { id: "asc" },
-    with: { invitee: true },
+    with: { invitee: true, category: true },
   });
+}
+
+export function getObligationCategories() {
+  return db
+    .select()
+    .from(obligationCategoriesTable)
+    .orderBy(obligationCategoriesTable.sortOrder);
 }
 
 export function createObligation({
   name,
   inviteeId,
+  categoryId,
 }: {
   inviteeId: number | null;
+  categoryId: number;
   name: string;
 }) {
   return db.insert(obligationsTable).values({
     name,
     inviteeId,
+    categoryId,
   });
 }
 

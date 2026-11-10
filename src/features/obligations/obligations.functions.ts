@@ -7,6 +7,7 @@ import { authMiddleware } from "@/features/auth/auth.middleware";
 import {
   claimObligation as claimObligationDb,
   createObligation as createObligationDb,
+  getObligationCategories as getObligationCategoriesDb,
   getObligations as getObligationsDb,
   releaseObligation as releaseObligationDb,
 } from "@/repositories/obligationsRepository";
@@ -18,13 +19,19 @@ export const getObligations = createServerFn({
   .middleware([authMiddleware])
   .handler(async () => getObligationsDb());
 
+export const getObligationCategories = createServerFn({
+  method: "GET",
+})
+  .middleware([authMiddleware])
+  .handler(async () => getObligationCategoriesDb());
+
 export const createObligation = createServerFn({
   method: "POST",
 })
   .middleware([authMiddleware])
   .validator(createObligationSchema)
-  .handler(async ({ data: { name, inviteeId } }) =>
-    createObligationDb({ name, inviteeId }),
+  .handler(async ({ data: { name, inviteeId, categoryId } }) =>
+    createObligationDb({ name, inviteeId, categoryId }),
   );
 
 export const claimObligation = createServerFn({

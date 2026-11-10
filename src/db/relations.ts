@@ -53,5 +53,15 @@ export const relations = defineRelations({ ...schemas }, (r) => ({
       from: r.obligationsTable.inviteeId,
       to: r.inviteesTable.id,
     }),
+    category: r.one.obligationCategoriesTable({
+      from: r.obligationsTable.categoryId,
+      to: r.obligationCategoriesTable.id,
+    }),
+  },
+  obligationCategoriesTable: {
+    obligations: r.many.obligationsTable({
+      from: r.obligationCategoriesTable.id,
+      to: r.obligationsTable.categoryId,
+    }),
   },
 }));

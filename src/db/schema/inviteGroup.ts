@@ -1,9 +1,9 @@
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { baseColumns } from "./base";
-import { Invitee } from "./invitee";
+import { type Invitee } from "./invitee";
 
 export const inviteGroupsTable = sqliteTable("invite_groups", {
   ...baseColumns,

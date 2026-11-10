@@ -1,9 +1,9 @@
 import { db } from "@/db/client";
-import { createInviteSchema, inviteTable } from "@/db/schema/invite";
+import { type createInviteSchema, inviteTable } from "@/db/schema/invite";
 import { inviteGroupsTable } from "@/db/schema/inviteGroup";
-import { createInviteeSchema, inviteesTable } from "@/db/schema/invitee";
+import { type createInviteeSchema, inviteesTable } from "@/db/schema/invitee";
 import { and, eq, gt, isNull, sql } from "drizzle-orm";
-import { z } from "zod";
+import { type z } from "zod";
 
 export async function validateInvite(code: string) {
   const invite = db

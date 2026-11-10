@@ -61,9 +61,9 @@ export const ObligationRow = ({
 
       {isMine ? (
         <div className="flex items-center gap-2">
-          <Badge variant="olive">Yours</Badge>
+          <Badge variant="olive">You</Badge>
           <Button variant="ghost" size="sm" onClick={release}>
-            <span aria-hidden>↩</span> Release
+            <span aria-hidden>↩</span> Never mind
           </Button>
         </div>
       ) : invitee ? (

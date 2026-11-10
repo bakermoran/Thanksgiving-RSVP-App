@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { baseColumns } from "./base";
 

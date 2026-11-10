@@ -1,4 +1,4 @@
-import { createInviteeSchema, getInviteeSchema } from "@/db/schema/invitee";
+import { getInviteeSchema } from "@/db/schema/invitee";
 import { setSession } from "@/features/auth/session";
 import { getInviteeByNameWithGroup } from "@/repositories/inviteeRepository";
 import { notFound } from "@tanstack/react-router";
