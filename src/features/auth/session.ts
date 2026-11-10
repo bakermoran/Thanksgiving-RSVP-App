@@ -1,3 +1,4 @@
+import { getInvitee } from "@/repositories/inviteeRepository";
 import {
   clearCookie,
   getSignedCookie,
@@ -17,7 +18,7 @@ export function setSession(session: Session) {
   setSignedCookie(COOKIE_NAME, JSON.stringify(session));
 }
 
-export function getSession(): Session | null {
+function readSessionCookie(): Session | null {
   const raw = getSignedCookie(COOKIE_NAME);
   if (!raw) return null;
 
@@ -31,4 +32,17 @@ export function getSession(): Session | null {
 
 export function clearSession() {
   clearCookie(COOKIE_NAME);
+}
+
+export async function getVerifiedSession(): Promise<Session | null> {
+  const session = readSessionCookie();
+  if (!session) return null;
+
+  const invitee = await getInvitee(session.inviteeId);
+  if (!invitee || invitee.inviteGroupId !== session.inviteGroupId) {
+    clearSession();
+    return null;
+  }
+
+  return session;
 }

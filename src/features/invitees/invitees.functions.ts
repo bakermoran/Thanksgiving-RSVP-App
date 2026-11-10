@@ -1,5 +1,5 @@
-import { getInviteeSchema } from "@/db/schema/invitee";
 import { setSession } from "@/features/auth/session";
+import { inviteeNameSchema } from "@/features/invitees/invitees.schemas";
 import { getInviteeByNameWithGroup } from "@/repositories/inviteeRepository";
 import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
@@ -7,7 +7,7 @@ import { createServerFn } from "@tanstack/react-start";
 export const getInvitee = createServerFn({
   method: "POST",
 })
-  .validator(getInviteeSchema)
+  .validator(inviteeNameSchema)
   .handler(async ({ data: { firstName, lastName } }) => {
     const invitee = await getInviteeByNameWithGroup({ firstName, lastName });
 

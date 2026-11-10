@@ -1,6 +1,6 @@
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { baseColumns } from "./base";
 import { inviteGroupsTable } from "./inviteGroup";
@@ -34,13 +34,3 @@ export const inviteeAliasesTable = sqliteTable(
 
 export const inviteeSchema = createSelectSchema(inviteesTable);
 export type Invitee = z.infer<typeof inviteeSchema>;
-
-export const getInviteeSchema = z.object({
-  firstName: z.string().trim().min(1, "Enter your first name"),
-  lastName: z.string().trim().min(1, "Enter your last name"),
-});
-
-export const createInviteeSchema = z.object({
-  firstName: z.string().trim().min(1, "Enter your first name"),
-  lastName: z.string().trim().min(1, "Enter your last name"),
-});

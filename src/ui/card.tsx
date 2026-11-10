@@ -12,7 +12,6 @@ type CardProps = React.HTMLAttributes<HTMLDivElement> & {
   tilt?: CardTilt;
 };
 
-/** A taped-down recipe card. */
 export const Card = ({
   tilt = "none",
   className,

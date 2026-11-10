@@ -1,5 +1,5 @@
-import { getInviteeSchema } from "@/db/schema/invitee";
 import { getInvitee } from "@/features/invitees/invitees.functions";
+import { inviteeNameSchema } from "@/features/invitees/invitees.schemas";
 import { Alert } from "@/ui/alert";
 import { Button } from "@/ui/button";
 import { Form } from "@/ui/form";
@@ -22,7 +22,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
     },
 
     validators: {
-      onSubmit: getInviteeSchema,
+      onSubmit: inviteeNameSchema,
     },
 
     listeners: {
@@ -50,7 +50,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
     <Form form={form} className="space-y-6">
       <form.Field
         name="firstName"
-        validators={{ onBlur: getInviteeSchema.shape.firstName }}
+        validators={{ onBlur: inviteeNameSchema.shape.firstName }}
       >
         {(field) => (
           <TextField
@@ -67,7 +67,7 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
 
       <form.Field
         name="lastName"
-        validators={{ onBlur: getInviteeSchema.shape.lastName }}
+        validators={{ onBlur: inviteeNameSchema.shape.lastName }}
       >
         {(field) => (
           <TextField
@@ -91,10 +91,11 @@ export const GetInviteeForm = ({ onSubmit }: GetInviteeFormProps) => {
           <Button
             type="submit"
             size="lg"
-            disabled={!canSubmit || isSubmitting}
+            disabled={!canSubmit}
+            loading={isSubmitting}
             className="w-full"
           >
-            {isSubmitting ? "Searching..." : "Search"}
+            Search
           </Button>
         )}
       </form.Subscribe>

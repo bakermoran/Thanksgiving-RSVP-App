@@ -14,7 +14,3 @@ export type InviteGroup = z.infer<typeof inviteGroupSchema>;
 export type InviteGroupWithInvitees = InviteGroup & {
   invitees: Invitee[];
 };
-
-export const getInviteGroupSchema = inviteGroupSchema.pick({
-  id: true,
-});

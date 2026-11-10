@@ -1,11 +1,11 @@
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
 
-import { getSession } from "./session";
+import { getVerifiedSession } from "./session";
 
 export const authMiddleware = createMiddleware({ type: "function" }).server(
-  ({ next }) => {
-    const session = getSession();
+  async ({ next }) => {
+    const session = await getVerifiedSession();
     if (!session) throw redirect({ to: "/" });
     return next({ context: { session } });
   },

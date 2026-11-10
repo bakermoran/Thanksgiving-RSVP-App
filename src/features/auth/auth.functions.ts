@@ -1,22 +1,10 @@
-import { getInvitee } from "@/repositories/inviteeRepository";
 import { createServerFn } from "@tanstack/react-start";
 
-import { type Session, clearSession, getSession } from "./session";
+import { type Session, clearSession, getVerifiedSession } from "./session";
 
 export const getCurrentSession = createServerFn({
   method: "GET",
-}).handler(async (): Promise<Session | null> => {
-  const session = getSession();
-  if (!session) return null;
-
-  const invitee = await getInvitee(session.inviteeId);
-  if (!invitee || invitee.inviteGroupId !== session.inviteGroupId) {
-    clearSession();
-    return null;
-  }
-
-  return session;
-});
+}).handler(async (): Promise<Session | null> => getVerifiedSession());
 
 export const logOut = createServerFn({
   method: "POST",

@@ -1,6 +1,5 @@
+import { createInvite } from "@/features/invite/invite.functions";
 import { Button } from "@/ui/button";
-
-import { createInvite } from "./invite.functions";
 
 export const InviteButton = () => {
   const onClick = async () => {

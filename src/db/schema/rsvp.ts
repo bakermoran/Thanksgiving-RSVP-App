@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { check, int, sqliteTable, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { baseColumns } from "./base";
 import { eventsTable } from "./event";
@@ -27,15 +27,3 @@ export const rsvpsTable = sqliteTable(
 
 export const rsvpsSchema = createSelectSchema(rsvpsTable);
 export type Rsvp = z.infer<typeof rsvpsSchema>;
-
-export const saveRsvpsSchema = z.object({
-  eventId: z.number().int(),
-  rsvps: z
-    .array(
-      z.object({
-        inviteeId: z.number().int(),
-        isAttending: z.boolean(),
-      }),
-    )
-    .min(1),
-});

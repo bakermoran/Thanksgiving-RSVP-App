@@ -1,8 +1,8 @@
 import { LogOutButton } from "@/features/auth/components/LogOutButton";
 import { requireSession } from "@/features/auth/guards";
 import { getEvents } from "@/features/events/events.functions";
-import { InviteButton } from "@/features/invite/InviteButton";
-import { getMyInviteGroup } from "@/features/inviteGroups/inviteeGroups.functions";
+import { InviteButton } from "@/features/invite/components/InviteButton";
+import { getMyInviteGroup } from "@/features/inviteGroups/inviteGroups.functions";
 import { RsvpBanner } from "@/features/rsvps/components/RsvpBanner";
 import { Page } from "@/ui/page";
 import { Outlet, createFileRoute } from "@tanstack/react-router";

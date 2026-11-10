@@ -1,33 +1,34 @@
 import { db } from "@/db/client";
-import { type createInviteSchema, inviteTable } from "@/db/schema/invite";
+import { invitesTable } from "@/db/schema/invite";
 import { inviteGroupsTable } from "@/db/schema/inviteGroup";
-import { type createInviteeSchema, inviteesTable } from "@/db/schema/invitee";
+import { inviteesTable } from "@/db/schema/invitee";
 import { and, eq, gt, isNull, sql } from "drizzle-orm";
-import { type z } from "zod";
 
 export async function validateInvite(code: string) {
   const invite = db
     .select()
-    .from(inviteTable)
+    .from(invitesTable)
     .where(
       and(
-        eq(inviteTable.code, code),
-        isNull(inviteTable.redeemedAt),
-        isNull(inviteTable.redeemedBy),
-        gt(inviteTable.expiresAt, sql`CURRENT_TIMESTAMP`),
+        eq(invitesTable.code, code),
+        isNull(invitesTable.redeemedAt),
+        isNull(invitesTable.redeemedBy),
+        gt(invitesTable.expiresAt, sql`CURRENT_TIMESTAMP`),
       ),
     )
     .get();
   return !!invite;
 }
 
-export async function createInvite(invite: z.infer<typeof createInviteSchema>) {
-  return db.insert(inviteTable).values(invite).returning().get();
+export async function createInvite(
+  invite: Pick<typeof invitesTable.$inferInsert, "code" | "createdBy">,
+) {
+  return db.insert(invitesTable).values(invite).returning().get();
 }
 
 export async function redeemInvite(
   code: string,
-  invitee: z.infer<typeof createInviteeSchema>,
+  invitee: Pick<typeof inviteesTable.$inferInsert, "firstName" | "lastName">,
 ) {
   return db.transaction((tx) => {
     const group = tx
@@ -43,16 +44,16 @@ export async function redeemInvite(
       .get();
 
     const redeemed = tx
-      .update(inviteTable)
+      .update(invitesTable)
       .set({ redeemedAt: new Date().toISOString(), redeemedBy: newInvitee.id })
       .where(
         and(
-          eq(inviteTable.code, code),
-          isNull(inviteTable.redeemedAt),
-          gt(inviteTable.expiresAt, sql`CURRENT_TIMESTAMP`),
+          eq(invitesTable.code, code),
+          isNull(invitesTable.redeemedAt),
+          gt(invitesTable.expiresAt, sql`CURRENT_TIMESTAMP`),
         ),
       )
-      .returning({ id: inviteTable.id })
+      .returning({ id: invitesTable.id })
       .get();
 
     if (!redeemed) {

@@ -1,14 +1,17 @@
+import { useState } from "react";
+
 import { cn } from "./cn";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base = [
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-3 border-bark transition-all duration-150",
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-3 border-bark transition-all duration-150",
   "hover:-translate-y-0.5",
   "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mustard",
   "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:rotate-0",
+  "aria-busy:cursor-wait aria-busy:opacity-100",
 ].join(" ");
 
 const variants: Record<ButtonVariant, string> = {
@@ -36,21 +39,67 @@ export const buttonVariants = ({
   size = "md",
 }: ButtonVariantProps = {}) => cn(base, variants[variant], sizes[size]);
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  ButtonVariantProps;
+type ButtonProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> &
+  ButtonVariantProps & {
+    loading?: boolean;
+    onClick?: (
+      event: React.MouseEvent<HTMLButtonElement>,
+    ) => void | Promise<unknown>;
+  };
 
 export const Button = ({
   variant,
   size,
   type = "button",
   className,
+  loading = false,
+  disabled,
+  onClick,
+  children,
   ...props
 }: ButtonProps) => {
+  const [isPending, setIsPending] = useState(false);
+  const isLoading = loading || isPending;
+
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const result = onClick?.(event);
+    if (!(result instanceof Promise)) return;
+    setIsPending(true);
+    try {
+      await result;
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return (
     <button
       type={type}
       {...props}
+      disabled={disabled || isLoading}
+      aria-busy={isLoading || undefined}
+      onClick={handleClick}
       className={cn(buttonVariants({ variant, size }), className)}
-    />
+    >
+      <span
+        className={cn(
+          "inline-flex items-center gap-2",
+          isLoading && "opacity-0",
+        )}
+      >
+        {children}
+      </span>
+      {isLoading && (
+        <span
+          aria-hidden
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <span className="size-[1em] animate-spin rounded-full border-2 border-current border-t-transparent" />
+        </span>
+      )}
+    </button>
   );
 };

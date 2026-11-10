@@ -1,6 +1,6 @@
 import type { Invitee } from "@/db/schema/invitee";
-import { saveRsvpsSchema } from "@/db/schema/rsvp";
 import { saveRsvps } from "@/features/rsvps/rsvps.functions";
+import { saveRsvpsSchema } from "@/features/rsvps/rsvps.schemas";
 import { Alert } from "@/ui/alert";
 import { Button } from "@/ui/button";
 import { Fieldset } from "@/ui/fieldset";
@@ -99,10 +99,10 @@ export const RsvpForm = ({
             <Button
               type="submit"
               size="lg"
-              disabled={isSubmitting}
+              loading={isSubmitting}
               className="w-full sm:ml-auto sm:flex sm:w-fit"
             >
-              {isSubmitting ? "Saving..." : submitLabel}
+              {submitLabel}
             </Button>
           </>
         )}

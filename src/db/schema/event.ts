@@ -23,7 +23,3 @@ export const eventsTable = sqliteTable("events", {
 
 export const eventsSchema = createSelectSchema(eventsTable);
 export type Event = z.infer<typeof eventsSchema>;
-
-export const getEventSchema = eventsSchema.pick({
-  id: true,
-});

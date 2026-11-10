@@ -1,6 +1,6 @@
 import { int, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { baseColumns } from "./base";
 import { inviteesTable } from "./invitee";
@@ -38,19 +38,3 @@ export const obligationCategoriesSchema = createSelectSchema(
   obligationCategoriesTable,
 );
 export type ObligationCategory = z.infer<typeof obligationCategoriesSchema>;
-
-export const createObligationSchema = z.object({
-  name: z.string().min(1, "Add a name"),
-  inviteeId: z.number().int().nullable(),
-  categoryId: z.number().int(),
-});
-
-export const claimObligationSchema = z.object({
-  id: z.number().int(),
-  inviteeId: z.number().int(),
-});
-
-export const releaseObligationSchema = z.object({
-  id: z.number().int(),
-  inviteeId: z.number().int(),
-});

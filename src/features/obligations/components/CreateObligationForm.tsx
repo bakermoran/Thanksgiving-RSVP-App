@@ -1,5 +1,5 @@
-import { createObligationSchema } from "@/db/schema/obligation";
 import { createObligation } from "@/features/obligations/obligations.functions";
+import { createObligationSchema } from "@/features/obligations/obligations.schemas";
 import { Alert } from "@/ui/alert";
 import { Button } from "@/ui/button";
 import { Form } from "@/ui/form";
@@ -80,8 +80,12 @@ export const CreateObligationForm = ({
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
               >
                 {([canSubmit, isSubmitting]) => (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                    {isSubmitting ? "Adding..." : "Add"}
+                  <Button
+                    type="submit"
+                    disabled={!canSubmit}
+                    loading={isSubmitting}
+                  >
+                    Add
                   </Button>
                 )}
               </form.Subscribe>

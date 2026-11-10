@@ -1,5 +1,5 @@
-import { createInviteeSchema } from "@/db/schema/invitee";
 import { redeemInvite } from "@/features/invite/invite.functions";
+import { inviteeNameSchema } from "@/features/invitees/invitees.schemas";
 import { Alert } from "@/ui/alert";
 import { Button } from "@/ui/button";
 import { Form } from "@/ui/form";
@@ -25,7 +25,7 @@ export const CreateInviteeForm = ({
     },
 
     validators: {
-      onSubmit: createInviteeSchema,
+      onSubmit: inviteeNameSchema,
     },
 
     listeners: {
@@ -48,7 +48,7 @@ export const CreateInviteeForm = ({
     <Form form={form} className="space-y-6">
       <form.Field
         name="firstName"
-        validators={{ onBlur: createInviteeSchema.shape.firstName }}
+        validators={{ onBlur: inviteeNameSchema.shape.firstName }}
       >
         {(field) => (
           <TextField
@@ -65,7 +65,7 @@ export const CreateInviteeForm = ({
 
       <form.Field
         name="lastName"
-        validators={{ onBlur: createInviteeSchema.shape.lastName }}
+        validators={{ onBlur: inviteeNameSchema.shape.lastName }}
       >
         {(field) => (
           <TextField
@@ -89,7 +89,8 @@ export const CreateInviteeForm = ({
           <Button
             type="submit"
             size="lg"
-            disabled={!canSubmit || isSubmitting}
+            disabled={!canSubmit}
+            loading={isSubmitting}
             className="w-full"
           >
             Join

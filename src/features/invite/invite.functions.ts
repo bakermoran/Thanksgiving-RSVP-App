@@ -1,4 +1,9 @@
-import { getInviteSchema, redeemInviteSchema } from "@/db/schema/invite";
+import { authMiddleware } from "@/features/auth/auth.middleware";
+import { setSession } from "@/features/auth/session";
+import {
+  getInviteSchema,
+  redeemInviteSchema,
+} from "@/features/invite/invite.schemas";
 import {
   createInvite as createInviteDb,
   redeemInvite as redeemInviteDb,
@@ -6,9 +11,6 @@ import {
 } from "@/repositories/inviteRepository";
 import { createServerFn } from "@tanstack/react-start";
 import { randomBytes } from "node:crypto";
-
-import { authMiddleware } from "../auth/auth.middleware";
-import { setSession } from "../auth/session";
 
 export const createInvite = createServerFn({
   method: "POST",

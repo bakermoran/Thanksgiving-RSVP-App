@@ -3,5 +3,4 @@ node_modules
 dist
 .vscode
 .tanstack
-bun.lock
 database.db

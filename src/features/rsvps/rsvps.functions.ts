@@ -1,7 +1,7 @@
-import { getEventSchema } from "@/db/schema/event";
-import { saveRsvpsSchema } from "@/db/schema/rsvp";
 import { authMiddleware } from "@/features/auth/auth.middleware";
-import { getEvent, getEvents } from "@/repositories/eventsRepository";
+import { getEventSchema } from "@/features/events/events.schemas";
+import { saveRsvpsSchema } from "@/features/rsvps/rsvps.schemas";
+import { getEvent, getEvents } from "@/repositories/eventRepository";
 import { getInviteGroup } from "@/repositories/inviteGroupRepository";
 import {
   getRsvpsForInviteGroup,
