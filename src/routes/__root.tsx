@@ -8,7 +8,7 @@ import {
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
 import appCss from "../style.css?url";
 
@@ -25,10 +25,15 @@ export const Route = createRootRoute({
       {
         title: "Gobble Gobble · Thanksgiving RSVP",
       },
+      { name: "theme-color", content: "#a3262a" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Gobble Gobble" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/images/turkey.svg", type: "image/svg+xml" },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "preconnect",
@@ -46,6 +51,14 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  useEffect(() => {
+    // Skip in dev so the service worker doesn't cache Vite's unhashed modules.
+    if (!import.meta.env.PROD || !("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.error("Service worker registration failed", error);
+    });
+  }, []);
+
   return (
     <RootDocument>
       <Outlet />
