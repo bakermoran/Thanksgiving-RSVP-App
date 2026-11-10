@@ -6,3 +6,12 @@ export function getInviteGroup(inviteGroupId: number) {
     with: { invitees: true },
   });
 }
+
+export function getAllInviteGroups() {
+  return db.query.inviteGroupsTable.findMany({
+    orderBy: { id: "asc" },
+    with: {
+      invitees: { orderBy: { lastName: "asc", firstName: "asc" } },
+    },
+  });
+}

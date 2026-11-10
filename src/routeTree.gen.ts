@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RsvpRouteImport } from './routes/_rsvp'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RsvpHomeRouteImport } from './routes/_rsvp/home'
 import { Route as RsvpRsvpRouteImport } from './routes/_rsvp/rsvp'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAuthedRouteImport } from './routes/admin/_authed'
 import { Route as RsvpEventsEventIdRouteImport } from './routes/_rsvp/events/$eventId'
+import { Route as AdminAuthedHomeRouteImport } from './routes/admin/_authed/home'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const RsvpRoute = RsvpRouteImport.update({
   id: '/_rsvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RedeemRoute = RedeemRouteImport.update({
@@ -40,53 +49,96 @@ const RsvpRsvpRoute = RsvpRsvpRouteImport.update({
   path: '/rsvp',
   getParentRoute: () => RsvpRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuthedRoute = AdminAuthedRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => AdminRoute,
+} as any)
 const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
   id: '/events/$eventId',
   path: '/events/$eventId',
   getParentRoute: () => RsvpRoute,
 } as any)
+const AdminAuthedHomeRoute = AdminAuthedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/redeem': typeof RedeemRoute
   '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
+  '/admin/': typeof AdminIndexRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
+  '/admin/home': typeof AdminAuthedHomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/redeem': typeof RedeemRoute
   '/home': typeof RsvpHomeRoute
   '/rsvp': typeof RsvpRsvpRoute
+  '/admin': typeof AdminIndexRoute
   '/events/$eventId': typeof RsvpEventsEventIdRoute
+  '/admin/home': typeof AdminAuthedHomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_rsvp': typeof RsvpRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
   '/redeem': typeof RedeemRoute
   '/_rsvp/home': typeof RsvpHomeRoute
   '/_rsvp/rsvp': typeof RsvpRsvpRoute
+  '/admin/_authed': typeof AdminAuthedRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/_rsvp/events/$eventId': typeof RsvpEventsEventIdRoute
+  '/admin/_authed/home': typeof AdminAuthedHomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/redeem' | '/home' | '/rsvp' | '/events/$eventId'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/redeem'
+    | '/home'
+    | '/rsvp'
+    | '/admin/'
+    | '/events/$eventId'
+    | '/admin/home'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/redeem' | '/home' | '/rsvp' | '/events/$eventId'
+  to:
+    | '/'
+    | '/redeem'
+    | '/home'
+    | '/rsvp'
+    | '/admin'
+    | '/events/$eventId'
+    | '/admin/home'
   id:
     | '__root__'
     | '/'
     | '/_rsvp'
+    | '/admin'
     | '/redeem'
     | '/_rsvp/home'
     | '/_rsvp/rsvp'
+    | '/admin/_authed'
+    | '/admin/'
     | '/_rsvp/events/$eventId'
+    | '/admin/_authed/home'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RsvpRoute: typeof RsvpRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
   RedeemRoute: typeof RedeemRoute
 }
 
@@ -104,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof RsvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/redeem': {
@@ -127,12 +186,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RsvpRsvpRouteImport
       parentRoute: typeof RsvpRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/_authed': {
+      id: '/admin/_authed'
+      path: ''
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminAuthedRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_rsvp/events/$eventId': {
       id: '/_rsvp/events/$eventId'
       path: '/events/$eventId'
       fullPath: '/events/$eventId'
       preLoaderRoute: typeof RsvpEventsEventIdRouteImport
       parentRoute: typeof RsvpRoute
+    }
+    '/admin/_authed/home': {
+      id: '/admin/_authed/home'
+      path: '/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof AdminAuthedHomeRouteImport
+      parentRoute: typeof AdminAuthedRoute
     }
   }
 }
@@ -151,9 +231,34 @@ const RsvpRouteChildren: RsvpRouteChildren = {
 
 const RsvpRouteWithChildren = RsvpRoute._addFileChildren(RsvpRouteChildren)
 
+interface AdminAuthedRouteChildren {
+  AdminAuthedHomeRoute: typeof AdminAuthedHomeRoute
+}
+
+const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
+  AdminAuthedHomeRoute: AdminAuthedHomeRoute,
+}
+
+const AdminAuthedRouteWithChildren = AdminAuthedRoute._addFileChildren(
+  AdminAuthedRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminAuthedRoute: typeof AdminAuthedRouteWithChildren
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuthedRoute: AdminAuthedRouteWithChildren,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RsvpRoute: RsvpRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
   RedeemRoute: RedeemRoute,
 }
 export const routeTree = rootRouteImport

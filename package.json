@@ -19,6 +19,7 @@
     "db:reset": "bun run db:drop && bun run db:setup",
     "db:check": "drizzle-kit check",
     "db:studio": "drizzle-kit studio",
+    "user:create": "bun src/db/createUser.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky"

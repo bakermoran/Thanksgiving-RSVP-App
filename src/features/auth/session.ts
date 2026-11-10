@@ -1,12 +1,12 @@
 import { getInvitee } from "@/repositories/inviteeRepository";
-import {
-  clearCookie,
-  getSignedCookie,
-  setSignedCookie,
-} from "@/utils/signedCookie";
+import { createSignedCookie } from "@/utils/signedCookie";
 import { z } from "zod";
 
-const COOKIE_NAME = "session";
+const sessionCookie = createSignedCookie({
+  name: "session",
+  secretEnv: "INVITE_COOKIE_SECRET",
+  maxAge: 60 * 60 * 24 * 60, // 60 days
+});
 
 export const sessionSchema = z.object({
   inviteeId: z.number().int(),
@@ -15,11 +15,11 @@ export const sessionSchema = z.object({
 export type Session = z.infer<typeof sessionSchema>;
 
 export function setSession(session: Session) {
-  setSignedCookie(COOKIE_NAME, JSON.stringify(session));
+  sessionCookie.set(JSON.stringify(session));
 }
 
 function readSessionCookie(): Session | null {
-  const raw = getSignedCookie(COOKIE_NAME);
+  const raw = sessionCookie.get();
   if (!raw) return null;
 
   try {
@@ -31,7 +31,7 @@ function readSessionCookie(): Session | null {
 }
 
 export function clearSession() {
-  clearCookie(COOKIE_NAME);
+  sessionCookie.clear();
 }
 
 export async function getVerifiedSession(): Promise<Session | null> {

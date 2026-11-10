@@ -64,4 +64,5 @@ export const relations = defineRelations({ ...schemas }, (r) => ({
       to: r.obligationsTable.categoryId,
     }),
   },
+  usersTable: {},
 }));

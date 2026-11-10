@@ -1,3 +1,4 @@
+import { createUser } from "@/repositories/userRepository";
 import { reset, seed } from "drizzle-seed";
 
 import { db } from "./client";
@@ -9,6 +10,7 @@ import {
   obligationsTable,
 } from "./schema/obligation";
 import { rsvpsTable } from "./schema/rsvp";
+import { usersTable } from "./schema/user";
 
 const schema = {
   inviteesTable,
@@ -19,7 +21,7 @@ const schema = {
 };
 
 // Include rsvps in the reset so FK constraints don't block wiping invitees/events.
-await reset(db, { ...schema, rsvpsTable });
+await reset(db, { ...schema, rsvpsTable, usersTable });
 
 await seed(db, schema, { seed: 1 }).refine((f) => ({
   inviteesTable: {
@@ -73,4 +75,11 @@ await seed(db, schema, { seed: 1 }).refine((f) => ({
   },
 }));
 
+// Users go through createUser so the password is hashed like in prod.
+const admin = await createUser({
+  email: "admin@example.com",
+  password: "gobblegobble",
+});
+
 console.log("Seeded local database");
+console.log(`Admin login: ${admin.email} / gobblegobble`);

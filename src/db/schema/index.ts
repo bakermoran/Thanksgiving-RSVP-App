@@ -7,8 +7,10 @@ import {
   obligationsTable,
 } from "@/db/schema/obligation";
 import { rsvpsTable } from "@/db/schema/rsvp";
+import { usersTable } from "@/db/schema/user";
 
 export default {
+  usersTable,
   inviteGroupsTable,
   inviteesTable,
   inviteeAliasesTable,

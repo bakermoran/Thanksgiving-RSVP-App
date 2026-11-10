@@ -42,3 +42,13 @@ export async function upsertRsvps(
       },
     });
 }
+
+export function getAllRsvps() {
+  return db
+    .select({
+      eventId: rsvpsTable.eventId,
+      inviteeId: rsvpsTable.inviteeId,
+      isAttending: rsvpsTable.isAttending,
+    })
+    .from(rsvpsTable);
+}
