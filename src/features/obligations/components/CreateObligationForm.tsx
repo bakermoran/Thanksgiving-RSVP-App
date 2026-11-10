@@ -51,8 +51,8 @@ export const CreateObligationForm = ({
 
   const inputId = `new-obligation-${categoryId}`;
 
-  const categoryStartsWithVowel = /^[aeiou]/i.test(categoryName);
-  const article = categoryStartsWithVowel ? "an" : "a";
+  const singular = categoryName.toLowerCase().replace(/s$/, "");
+  const article = /^[aeiou]/.test(singular) ? "an" : "a";
 
   return (
     <Form form={form} className="mt-3 space-y-3">
@@ -70,7 +70,7 @@ export const CreateObligationForm = ({
                 type="text"
                 id={inputId}
                 name={field.name}
-                placeholder={`Add ${article} ${categoryName.toLowerCase()}…`}
+                placeholder={`Add ${article} ${singular}…`}
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
