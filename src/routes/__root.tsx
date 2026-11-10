@@ -10,6 +10,8 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import appCss from "../style.css?url";
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -25,6 +27,7 @@ export const Route = createRootRoute({
       },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/images/turkey.svg", type: "image/svg+xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
@@ -55,7 +58,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     <html lang="en">
       <head>
         <HeadContent />
-        <link href="/src/style.css" rel="stylesheet"></link>
       </head>
       <body className="flex min-h-dvh flex-col">
         <FallingLeaves />
