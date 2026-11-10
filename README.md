@@ -6,4 +6,4 @@ AI did most of the frontend because I was primarily interested in getting some e
 
 I have ideas of extracting the theme engine and making this generic to other events some day, but we'll see how far I get on that front.
 
-Hosted on a raspberry pi under a chair in my kitchen at thanksgiving.bakermoran.dev
+Hosted on a raspberry pi under a chair in my kitchen at [https://thanksgiving.bakermoran.dev](https://thanksgiving.bakermoran.dev)
