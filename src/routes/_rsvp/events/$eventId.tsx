@@ -1,13 +1,16 @@
 import type { Event } from "@/db/schema/event";
 import { EventProgress } from "@/features/events/components/EventProgress";
 import { RsvpForm } from "@/features/rsvps/components/RsvpForm";
-import { getEventRsvps } from "@/features/rsvps/rsvps.functions";
+import {
+  getEventRsvps,
+  hasCompletedAllRsvps,
+} from "@/features/rsvps/rsvps.functions";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { Link } from "@/ui/link";
 import { PageHeader } from "@/ui/page-header";
 import { mapsLink, toAddressString } from "@/utils/address";
-import { formatEventTime } from "@/utils/date";
+import { formatEventTimeRange } from "@/utils/date";
 import {
   createFileRoute,
   getRouteApi,
@@ -24,7 +27,13 @@ export const Route = createFileRoute("/_rsvp/events/$eventId")({
     }),
     stringify: (p) => ({ eventId: String(p.eventId) }),
   },
-  loader: ({ params }) => getEventRsvps({ data: { id: params.eventId } }),
+  loader: async ({ params }) => {
+    const [data, completedAll] = await Promise.all([
+      getEventRsvps({ data: { id: params.eventId } }),
+      hasCompletedAllRsvps(),
+    ]);
+    return { ...data, completedAll };
+  },
   gcTime: 0,
   component: EventPage,
 });
@@ -40,14 +49,14 @@ const EventDetail = ({ event }: { event: Event }) => {
       >
         {toAddressString(event)}
       </a>
-      <p>{formatEventTime(event.time)}</p>
+      <p>{formatEventTimeRange(event.startTime, event.endTime)}</p>
     </h3>
   );
 };
 
 function EventPage() {
   const navigate = useNavigate();
-  const { event, rsvps } = Route.useLoaderData();
+  const { event, rsvps, completedAll } = Route.useLoaderData();
   const { inviteGroup, events } = rsvpLayout.useLoaderData();
 
   const index = events.findIndex((e) => e.id === event.id);
@@ -55,12 +64,14 @@ function EventPage() {
   const next = events[index + 1];
 
   const onSaved = () => {
-    if (next) {
+    if (next && !completedAll) {
       navigate({ to: "/events/$eventId", params: { eventId: next.id } });
     } else {
       navigate({ to: "/home" });
     }
   };
+
+  const submitLabel = completedAll ? "Save" : next ? "Next" : "Review";
 
   return (
     <div>
@@ -68,7 +79,11 @@ function EventPage() {
         illustration={<EventProgress count={events.length} current={index} />}
         eyebrow={`Event ${index + 1} of ${events.length}`}
         title={event.name}
-        detail={<EventDetail event={event} />}
+        detail={
+          <>
+            <EventDetail event={event} />
+          </>
+        }
         size="md"
       />
 
@@ -82,12 +97,12 @@ function EventPage() {
           eventId={event.id}
           invitees={inviteGroup.invitees}
           rsvps={rsvps}
-          submitLabel={next ? "Next" : "Review"}
+          submitLabel={submitLabel}
           onSaved={onSaved}
         />
       </Card>
 
-      {prev && (
+      {prev && !completedAll && (
         <div className="mt-8 text-center">
           <Link
             to="/events/$eventId"

@@ -14,9 +14,9 @@ export const createInvite = createServerFn({
   method: "POST",
 })
   .middleware([authMiddleware])
-  .handler(async () => {
+  .handler(async ({ context }) => {
     const code = randomBytes(8).toString("hex");
-    return await createInviteDb(code);
+    return await createInviteDb({ code, createdBy: context.session.inviteeId });
   });
 
 export const validateInvite = createServerFn({

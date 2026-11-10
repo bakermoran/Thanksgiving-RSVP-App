@@ -4,7 +4,7 @@ type PageWidth = "sm" | "md";
 
 const widths: Record<PageWidth, string> = {
   sm: "max-w-xl",
-  md: "max-w-2xl",
+  md: "max-w-6xl",
 };
 
 type PageProps = React.HTMLAttributes<HTMLElement> & {

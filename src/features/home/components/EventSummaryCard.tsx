@@ -36,7 +36,7 @@ export const EventSummaryCard = ({
       </div>
 
       <p className="mt-1 text-sm font-bold text-cocoa">
-        {formatEventTime(event.time)}
+        {formatEventTime(event.startTime)} - {formatEventTime(event.endTime)}
       </p>
       <a
         href={mapsLink(event)}

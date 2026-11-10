@@ -8,7 +8,10 @@ import { baseColumns } from "./base";
 export const eventsTable = sqliteTable("events", {
   ...baseColumns,
   name: text().notNull(),
-  time: text()
+  startTime: text()
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  endTime: text()
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
   address1: text().notNull(),
