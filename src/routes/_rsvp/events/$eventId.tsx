@@ -73,10 +73,20 @@ function EventPage() {
 
   const submitLabel = completedAll ? "Save" : next ? "Next" : "Review";
 
+  const onProgressButtonClick = (id: number) => {
+    navigate({ to: "/events/$eventId", params: { eventId: id } });
+  };
+
   return (
     <div>
       <PageHeader
-        illustration={<EventProgress count={events.length} current={index} />}
+        illustration={
+          <EventProgress
+            events={events}
+            current={index}
+            onProgressButtonClick={onProgressButtonClick}
+          />
+        }
         eyebrow={`Event ${index + 1} of ${events.length}`}
         title={event.name}
         detail={

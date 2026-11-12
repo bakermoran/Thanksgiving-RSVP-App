@@ -1,21 +1,28 @@
+import type { Event } from "@/shared/types";
 import { cn } from "@/ui/cn";
 
 interface EventProgressProps {
-  count: number;
+  events: Event[];
   current: number;
+  onProgressButtonClick: (id: number) => void;
 }
 
-export const EventProgress = ({ count, current }: EventProgressProps) => (
+export const EventProgress = ({
+  events,
+  current,
+  onProgressButtonClick,
+}: EventProgressProps) => (
   <ol aria-hidden className="mb-4 flex items-center justify-center gap-2">
-    {Array.from({ length: count }, (_, i) => (
+    {events.map((event, i) => (
       <li
-        key={i}
+        key={event.id}
         className={cn(
-          "rounded-full border-3 border-bark transition",
+          "rounded-full border-3 border-bark transition hover:cursor-pointer",
           i < current && "size-4 bg-olive",
           i === current && "size-6 bg-pumpkin shadow-chunky-sm",
           i > current && "size-4 bg-cream",
         )}
+        onClick={() => onProgressButtonClick(event.id)}
       />
     ))}
   </ol>
