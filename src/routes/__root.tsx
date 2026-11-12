@@ -1,7 +1,7 @@
-import { Bunting } from "@/features/layout/components/Bunting";
-import { FallingLeaves } from "@/features/layout/components/FallingLeaves";
-import { Footer } from "@/features/layout/components/Footer";
-import { NotFound } from "@/features/layout/components/NotFound";
+import { Bunting } from "@/components/layout/Bunting";
+import { FallingLeaves } from "@/components/layout/FallingLeaves";
+import { Footer } from "@/components/layout/Footer";
+import { NotFound } from "@/components/layout/NotFound";
 import {
   HeadContent,
   Outlet,

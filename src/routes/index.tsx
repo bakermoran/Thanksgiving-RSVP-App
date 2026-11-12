@@ -1,6 +1,6 @@
-import { redirectIfLoggedIn } from "@/features/auth/guards";
-import { GetInviteeForm } from "@/features/invitees/components/GetInviteeForm";
-import { HarvestRow } from "@/features/layout/components/HarvestRow";
+import { GetInviteeForm } from "@/components/invitees/GetInviteeForm";
+import { HarvestRow } from "@/components/layout/HarvestRow";
+import { redirectIfLoggedIn } from "@/routes/-guards";
 import { Alert } from "@/ui/alert";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";

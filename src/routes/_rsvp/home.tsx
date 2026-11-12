@@ -1,11 +1,11 @@
-import { EventSummaryCard } from "@/features/home/components/EventSummaryCard";
-import { Stat } from "@/features/home/components/Stat";
-import { ObligationList } from "@/features/obligations/components/ObligationList";
+import { EventSummaryCard } from "@/components/home/EventSummaryCard";
+import { Stat } from "@/components/home/Stat";
+import { ObligationList } from "@/components/obligations/ObligationList";
 import {
   getObligationCategories,
   getObligations,
-} from "@/features/obligations/obligations.functions";
-import { getMyRsvps } from "@/features/rsvps/rsvps.functions";
+} from "@/functions/obligations.functions";
+import { getMyRsvps } from "@/functions/rsvps.functions";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { PageHeader } from "@/ui/page-header";

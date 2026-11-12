@@ -1,5 +1,5 @@
-import { AdminLoginForm } from "@/features/adminAuth/components/AdminLoginForm";
-import { redirectIfAdmin } from "@/features/adminAuth/guards";
+import { AdminLoginForm } from "@/components/adminAuth/AdminLoginForm";
+import { redirectIfAdmin } from "@/routes/-guards";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { Page } from "@/ui/page";

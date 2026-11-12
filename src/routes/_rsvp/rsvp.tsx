@@ -1,5 +1,5 @@
-import { getEvents } from "@/features/events/events.functions";
-import { hasCompletedAllRsvps } from "@/features/rsvps/rsvps.functions";
+import { getEvents } from "@/functions/events.functions";
+import { hasCompletedAllRsvps } from "@/functions/rsvps.functions";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_rsvp/rsvp")({

@@ -1,7 +1,7 @@
-import { getAdminDashboard } from "@/features/admin/admin.functions";
-import { AddInviteeForm } from "@/features/admin/components/AddInviteeForm";
-import { AdminEventCard } from "@/features/admin/components/AdminEventCard";
-import { InviteGroupCard } from "@/features/admin/components/InviteGroupCard";
+import { AddInviteeForm } from "@/components/admin/AddInviteeForm";
+import { AdminEventCard } from "@/components/admin/AdminEventCard";
+import { InviteGroupCard } from "@/components/admin/InviteGroupCard";
+import { getAdminDashboard } from "@/functions/admin.functions";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { PageHeader } from "@/ui/page-header";

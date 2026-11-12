@@ -1,16 +1,16 @@
-import type { Event } from "@/db/schema/event";
-import { EventProgress } from "@/features/events/components/EventProgress";
-import { RsvpForm } from "@/features/rsvps/components/RsvpForm";
+import { EventProgress } from "@/components/events/EventProgress";
+import { RsvpForm } from "@/components/rsvps/RsvpForm";
 import {
   getEventRsvps,
   hasCompletedAllRsvps,
-} from "@/features/rsvps/rsvps.functions";
+} from "@/functions/rsvps.functions";
+import { mapsLink, toAddressString } from "@/shared/address";
+import { formatEventTimeRange } from "@/shared/date";
+import type { Event } from "@/shared/types";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { Link } from "@/ui/link";
 import { PageHeader } from "@/ui/page-header";
-import { mapsLink, toAddressString } from "@/utils/address";
-import { formatEventTimeRange } from "@/utils/date";
 import {
   createFileRoute,
   getRouteApi,

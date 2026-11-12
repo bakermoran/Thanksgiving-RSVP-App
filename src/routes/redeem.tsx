@@ -1,6 +1,6 @@
-import { validateInvite } from "@/features/invite/invite.functions";
-import { CreateInviteeForm } from "@/features/invitees/components/CreateInviteeForm";
-import { HarvestRow } from "@/features/layout/components/HarvestRow";
+import { CreateInviteeForm } from "@/components/invitees/CreateInviteeForm";
+import { HarvestRow } from "@/components/layout/HarvestRow";
+import { validateInvite } from "@/functions/invite.functions";
 import { Card } from "@/ui/card";
 import { Illustration } from "@/ui/illustration";
 import { Page } from "@/ui/page";

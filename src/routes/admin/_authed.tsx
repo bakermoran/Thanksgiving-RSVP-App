@@ -1,5 +1,5 @@
-import { AdminLogOutButton } from "@/features/adminAuth/components/AdminLogOutButton";
-import { requireAdmin } from "@/features/adminAuth/guards";
+import { AdminLogOutButton } from "@/components/adminAuth/AdminLogOutButton";
+import { requireAdmin } from "@/routes/-guards";
 import { Page } from "@/ui/page";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
