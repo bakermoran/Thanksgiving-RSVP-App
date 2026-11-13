@@ -6,5 +6,10 @@ export {
   release,
   rename,
 } from "./assignment";
-export { createCategory, destroyCategory, renameCategory } from "./categories";
+export {
+  createCategory,
+  destroyCategory,
+  renameCategory,
+  reorderCategories,
+} from "./categories";
 export { listCategories } from "./queries";

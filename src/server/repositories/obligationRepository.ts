@@ -15,9 +15,30 @@ export function getObligationCategories() {
 export function createObligationCategory({ name }: { name: string }) {
   return db.insert(obligationCategoriesTable).values({
     name,
-    // New categories go last. Computed inside the insert so the unique
-    // sort_order index can't be hit by a read-then-write race.
     sortOrder: sql`(select coalesce(max(${obligationCategoriesTable.sortOrder}), 0) + 1 from ${obligationCategoriesTable})`,
+  });
+}
+
+export async function getObligationCategoryIds() {
+  const rows = await db
+    .select({ id: obligationCategoriesTable.id })
+    .from(obligationCategoriesTable);
+
+  return rows.map((row) => row.id);
+}
+
+// sort_order has a unique index, so rows can't be renumbered one at a time
+export function reorderObligationCategories({ ids }: { ids: number[] }) {
+  return db.transaction((tx) => {
+    const setSortOrder = (id: number, sortOrder: number) =>
+      tx
+        .update(obligationCategoriesTable)
+        .set({ sortOrder })
+        .where(eq(obligationCategoriesTable.id, id))
+        .run();
+
+    ids.forEach((id, index) => setSortOrder(id, -(index + 1)));
+    ids.forEach((id, index) => setSortOrder(id, index + 1));
   });
 }
 
@@ -53,8 +74,6 @@ export async function renameObligation({
   return renamed;
 }
 
-// Deletes the category's obligations first, in the same transaction, rather
-// than relying on the FK's ON DELETE CASCADE existing in the live database.
 export function destroyObligationCategory({ id }: { id: number }) {
   return db.transaction((tx) => {
     tx.delete(obligationsTable)

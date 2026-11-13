@@ -14,8 +14,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/ui/platform/card";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useRouter } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
+import { cn } from "cn";
+import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { AddObligationForm } from "./AddObligationForm";
@@ -30,6 +33,15 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
   const router = useRouter();
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category.id });
 
   const onDestroy = async (id: number) => {
     if (!window.confirm("Delete this? Anyone who claimed it loses it.")) return;
@@ -60,7 +72,12 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
   const claimed = category.obligations.filter((o) => o.invitee).length;
 
   return (
-    <Card key={category.id}>
+    <Card
+      key={category.id}
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={cn(isDragging && "relative z-10 shadow-lg")}
+    >
       <CardHeader>
         <CardTitle>
           <EditableName
@@ -76,7 +93,19 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
         <CardDescription>
           {claimed} of {category.obligations.length} claimed
         </CardDescription>
-        <CardAction>
+        <CardAction className="flex items-center gap-1">
+          <Button
+            ref={setActivatorNodeRef}
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={`Reorder ${category.name}`}
+            className="cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical />
+          </Button>
           <Button
             variant="ghost"
             size="icon-sm"

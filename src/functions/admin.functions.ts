@@ -18,6 +18,7 @@ import {
   renameInviteeSchema,
   renameObligationCategorySchema,
   renameObligationSchema,
+  reorderObligationCategoriesSchema,
   updateEventSchema,
 } from "@/shared/schemas/admin";
 import { notFound } from "@tanstack/react-router";
@@ -85,6 +86,13 @@ export const renameObligationCategory = createServerFn({
     if (!category) throw notFound();
     return category;
   });
+
+export const reorderObligationCategories = createServerFn({
+  method: "POST",
+})
+  .middleware([adminAuthMiddleware])
+  .validator(reorderObligationCategoriesSchema)
+  .handler(async ({ data }) => obligationService.reorderCategories(data));
 
 export const renameObligation = createServerFn({
   method: "POST",

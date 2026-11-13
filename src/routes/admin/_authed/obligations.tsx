@@ -1,5 +1,5 @@
 import { AddObligationCategoryForm } from "@/components/admin/AddObligationCategoryForm";
-import { AdminObligationList } from "@/components/admin/AdminObligationCard";
+import { SortableObligationCategories } from "@/components/admin/SortableObligationCategories";
 import { getAdminObligations } from "@/functions/admin.functions";
 import {
   Card,
@@ -27,11 +27,7 @@ function ObligationsPage() {
         title="Obligations"
         description="Dishes and jobs guests can claim."
       />
-      <div className="grid gap-6 md:grid-cols-2">
-        {categories.map((category) => (
-          <AdminObligationList key={category.id} category={category} />
-        ))}
-
+      <SortableObligationCategories categories={categories}>
         <Card className="border-dashed shadow-none">
           <CardHeader>
             <CardTitle>New category</CardTitle>
@@ -42,7 +38,7 @@ function ObligationsPage() {
             <AddObligationCategoryForm />
           </CardFooter>
         </Card>
-      </div>
+      </SortableObligationCategories>
     </>
   );
 }

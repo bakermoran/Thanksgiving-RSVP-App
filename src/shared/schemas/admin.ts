@@ -88,6 +88,13 @@ export const renameObligationCategorySchema =
 
 export const destroyObligationCategorySchema = destroyObligationSchema;
 
+export const reorderObligationCategoriesSchema = z.object({
+  ids: z
+    .array(z.number().int().positive())
+    .min(1)
+    .refine((ids) => new Set(ids).size === ids.length, "Duplicate category"),
+});
+
 export const renameObligationSchema = addObligationSchema
   .pick({ name: true })
   .extend({ id: z.number().int().positive() });
