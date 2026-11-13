@@ -29,8 +29,9 @@ export const RadioCard = ({
     className={cn(
       "group flex cursor-pointer items-center gap-3 rounded-2xl border-3 border-bark bg-cream px-4 py-3 text-lg font-semibold shadow-chunky-sm transition",
       "hover:-translate-y-0.5 hover:bg-parchment",
-      "has-checked:translate-x-[2px] has-checked:translate-y-[2px] has-checked:text-cream has-checked:shadow-none",
+      "has-checked:translate-x-0.5 has-checked:translate-y-0.5 has-checked:text-cream has-checked:shadow-none",
       "has-focus-visible:ring-4 has-focus-visible:ring-mustard",
+      "has-disabled:cursor-not-allowed has-disabled:opacity-80 has-disabled:hover:translate-y-0 has-disabled:hover:bg-cream",
       tones[tone],
       className,
     )}
