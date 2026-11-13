@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 
 export function getEvents() {
   return db.query.eventsTable.findMany({
-    orderBy: { id: "asc" },
+    orderBy: { startTime: "asc", id: "asc" },
   });
 }
 
