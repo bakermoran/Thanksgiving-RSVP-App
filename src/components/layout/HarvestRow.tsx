@@ -1,4 +1,4 @@
-import { Illustration } from "@/ui/illustration";
+import { Illustration } from "@/ui/guest/illustration";
 
 export const HarvestRow = () => (
   <div aria-hidden className="mt-8 flex items-end justify-center gap-6">

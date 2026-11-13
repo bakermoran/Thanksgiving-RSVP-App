@@ -1,14 +1,14 @@
 import { CreateInviteeForm } from "@/components/invitees/CreateInviteeForm";
 import { HarvestRow } from "@/components/layout/HarvestRow";
 import { validateInvite } from "@/functions/invite.functions";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { Page } from "@/ui/page";
-import { PageHeader } from "@/ui/page-header";
+import { Card } from "@/ui/guest/card";
+import { Illustration } from "@/ui/guest/illustration";
+import { Page } from "@/ui/guest/page";
+import { PageHeader } from "@/ui/guest/page-header";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 
-export const Route = createFileRoute("/redeem")({
+export const Route = createFileRoute("/_guest/redeem")({
   component: RedeemComponent,
   validateSearch: z.object({
     code: z.string().optional(),

@@ -1,60 +1,54 @@
-import type { ObligationCategory } from "@/shared/types";
-import { Card } from "@/ui/card";
+import type { ObligationCategoryWithObligations } from "@/shared/types";
+import { Card } from "@/ui/guest/card";
 
 import { CreateObligationForm } from "./CreateObligationForm";
-import { ObligationRow, type ObligationWithInvitee } from "./ObligationRow";
+import { ObligationRow } from "./ObligationRow";
 
 interface ObligationListProps {
-  obligations: ObligationWithInvitee[];
-  categories: ObligationCategory[];
+  categories: ObligationCategoryWithObligations[];
   inviteeId: number;
+  onDestroy?: (id: number) => void;
 }
 
 export const ObligationList = ({
-  obligations,
   categories,
   inviteeId,
+  onDestroy,
 }: ObligationListProps) => {
-  const sections = categories.map((category) => ({
-    key: String(category.id),
-    categoryId: category.id,
-    title: category.name,
-    items: obligations.filter((o) => o.categoryId === category.id),
-  }));
-
   return (
     <Card tilt="left">
       <div className="space-y-10">
-        {sections.map((section) => (
+        {categories.map((category) => (
           <section
-            key={section.key}
-            aria-labelledby={`obligation-category-${section.key}`}
+            key={category.id}
+            aria-labelledby={`obligation-category-${category.id}`}
           >
             <h3
-              id={`obligation-category-${section.key}`}
+              id={`obligation-category-${category.id}`}
               className="font-display text-2xl text-cranberry"
             >
-              {section.title}
+              {category.name}
             </h3>
-            {section.items.length === 0 ? (
+            {category.obligations.length === 0 ? (
               <p className="py-2.5 text-lg font-medium text-cocoa">
                 Nothing here yet.
               </p>
             ) : (
               <ul>
-                {section.items.map((obligation) => (
+                {category.obligations.map((obligation) => (
                   <ObligationRow
                     key={obligation.id}
                     obligation={obligation}
                     inviteeId={inviteeId}
+                    onDestroy={onDestroy}
                   />
                 ))}
               </ul>
             )}
             <CreateObligationForm
               inviteeId={inviteeId}
-              categoryId={section.categoryId}
-              categoryName={section.title}
+              categoryId={category.id}
+              categoryName={category.name}
             />
           </section>
         ))}

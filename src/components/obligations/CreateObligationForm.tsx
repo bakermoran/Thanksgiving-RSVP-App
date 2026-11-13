@@ -1,11 +1,11 @@
 import { createObligation } from "@/functions/obligations.functions";
 import { createObligationSchema } from "@/shared/schemas/obligations";
-import { Alert } from "@/ui/alert";
-import { Button } from "@/ui/button";
-import { Form } from "@/ui/form";
-import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
-import { FieldError } from "@/ui/text-field";
+import { Alert } from "@/ui/guest/alert";
+import { Button } from "@/ui/guest/button";
+import { Form } from "@/ui/guest/form";
+import { Input } from "@/ui/guest/input";
+import { Label } from "@/ui/guest/label";
+import { FieldError } from "@/ui/guest/text-field";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";

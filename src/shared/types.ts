@@ -4,5 +4,7 @@ export type { InviteGroupWithInvitees } from "@/server/db/schema/inviteGroup";
 export type {
   Obligation,
   ObligationCategory,
+  ObligationCategoryWithObligations,
+  ObligationWithInvitee,
 } from "@/server/db/schema/obligation";
 export type { PublicUser } from "@/server/db/schema/user";

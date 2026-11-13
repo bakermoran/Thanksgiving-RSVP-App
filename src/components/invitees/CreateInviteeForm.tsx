@@ -1,9 +1,9 @@
 import { redeemInvite } from "@/functions/invite.functions";
 import { inviteeNameSchema } from "@/shared/schemas/invitees";
-import { Alert } from "@/ui/alert";
-import { Button } from "@/ui/button";
-import { Form } from "@/ui/form";
-import { TextField } from "@/ui/text-field";
+import { Alert } from "@/ui/guest/alert";
+import { Button } from "@/ui/guest/button";
+import { Form } from "@/ui/guest/form";
+import { TextField } from "@/ui/guest/text-field";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 

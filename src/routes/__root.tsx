@@ -1,6 +1,4 @@
-import { Bunting } from "@/components/layout/Bunting";
-import { FallingLeaves } from "@/components/layout/FallingLeaves";
-import { Footer } from "@/components/layout/Footer";
+import { themeInitScript } from "@/components/admin/theme";
 import { NotFound } from "@/components/layout/NotFound";
 import {
   HeadContent,
@@ -45,6 +43,7 @@ export const Route = createRootRoute({
         href: "https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Lobster&family=Rye&display=swap",
       },
     ],
+    scripts: [{ children: themeInitScript }],
   }),
   component: RootComponent,
   notFoundComponent: NotFound,
@@ -68,15 +67,12 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">
-        <FallingLeaves />
-        <Bunting />
-        <div className="relative z-10 flex-1 overflow-x-clip">{children}</div>
-        <Footer />
+        {children}
         <Scripts />
       </body>
     </html>

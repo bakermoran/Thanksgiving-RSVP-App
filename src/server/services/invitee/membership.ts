@@ -8,6 +8,14 @@ export function add(invitee: {
   return inviteeRepository.createInvitee(invitee);
 }
 
+export function rename(rename: {
+  inviteeId: number;
+  firstName: string;
+  lastName: string;
+}) {
+  return inviteeRepository.renameInvitee(rename);
+}
+
 export function move(move: {
   inviteeId: number;
   inviteGroupId: number | null;

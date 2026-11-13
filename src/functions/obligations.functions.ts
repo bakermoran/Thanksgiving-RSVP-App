@@ -7,12 +7,6 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { authMiddleware } from "./middleware";
 
-export const getObligations = createServerFn({
-  method: "GET",
-})
-  .middleware([authMiddleware])
-  .handler(async () => obligationService.list());
-
 export const getObligationCategories = createServerFn({
   method: "GET",
 })

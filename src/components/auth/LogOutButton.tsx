@@ -1,5 +1,5 @@
 import { logOut } from "@/functions/auth.functions";
-import { Button } from "@/ui/button";
+import { Button } from "@/ui/guest/button";
 import { useRouter } from "@tanstack/react-router";
 
 export const LogOutButton = ({ name }: { name: string }) => {

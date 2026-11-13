@@ -1,2 +1,2 @@
-export { add, move, remove } from "./membership";
+export { add, move, remove, rename } from "./membership";
 export { findByName, get } from "./queries";

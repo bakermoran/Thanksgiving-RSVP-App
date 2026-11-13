@@ -1,12 +1,12 @@
 import { addInvitee } from "@/functions/admin.functions";
 import { inviteeNameSchema } from "@/shared/schemas/invitees";
-import { Alert } from "@/ui/alert";
-import { Button } from "@/ui/button";
-import { Form } from "@/ui/form";
-import { Input } from "@/ui/input";
-import { FieldError } from "@/ui/text-field";
+import { Button } from "@/ui/platform/button";
+import { FieldError } from "@/ui/platform/field-error";
+import { Form } from "@/ui/platform/form";
+import { Input } from "@/ui/platform/input";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
+import { LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 
 interface AddInviteeFormProps {
@@ -40,12 +40,12 @@ export const AddInviteeForm = ({
   });
 
   return (
-    <Form form={form} className="space-y-2">
+    <Form form={form} className="w-full space-y-2">
       <div className="flex flex-wrap items-start gap-2">
         {(["firstName", "lastName"] as const).map((name) => (
           <form.Field key={name} name={name}>
             {(field) => (
-              <div className="min-w-0 flex-1 basis-32">
+              <div className="min-w-0 flex-1 basis-28 space-y-1">
                 <Input
                   id={`${idPrefix}-${name}`}
                   name={name}
@@ -55,7 +55,6 @@ export const AddInviteeForm = ({
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  className="px-3 py-1.5 text-base"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </div>
@@ -70,16 +69,24 @@ export const AddInviteeForm = ({
             <Button
               type="submit"
               variant="secondary"
-              disabled={!canSubmit}
-              loading={isSubmitting}
+              disabled={!canSubmit || isSubmitting}
             >
+              {isSubmitting ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                <Plus />
+              )}
               {submitLabel}
             </Button>
           )}
         </form.Subscribe>
       </div>
 
-      {error && <Alert>{error}</Alert>}
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
     </Form>
   );
 };

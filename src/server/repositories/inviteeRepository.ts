@@ -98,6 +98,23 @@ export function createInvitee({
   );
 }
 
+export function renameInvitee({
+  inviteeId,
+  firstName,
+  lastName,
+}: {
+  inviteeId: number;
+  firstName: string;
+  lastName: string;
+}) {
+  return db
+    .update(inviteesTable)
+    .set({ firstName, lastName })
+    .where(eq(inviteesTable.id, inviteeId))
+    .returning()
+    .get();
+}
+
 export function moveInvitee({
   inviteeId,
   inviteGroupId,
@@ -126,6 +143,28 @@ export function moveInvitee({
   });
 }
 
+// Deletes an invitee and everything that points at them. Their claimed
+// obligations are released rather than deleted.
+function purgeInvitee(tx: Tx, inviteeId: number) {
+  tx.delete(rsvpsTable).where(eq(rsvpsTable.inviteeId, inviteeId)).run();
+  tx.delete(inviteeAliasesTable)
+    .where(eq(inviteeAliasesTable.inviteeId, inviteeId))
+    .run();
+  tx.update(obligationsTable)
+    .set({ inviteeId: null })
+    .where(eq(obligationsTable.inviteeId, inviteeId))
+    .run();
+  tx.update(invitesTable)
+    .set({ createdBy: null })
+    .where(eq(invitesTable.createdBy, inviteeId))
+    .run();
+  tx.update(invitesTable)
+    .set({ redeemedBy: null })
+    .where(eq(invitesTable.redeemedBy, inviteeId))
+    .run();
+  tx.delete(inviteesTable).where(eq(inviteesTable.id, inviteeId)).run();
+}
+
 export function deleteInvitee(inviteeId: number) {
   return db.transaction((tx) => {
     const invitee = tx
@@ -135,25 +174,33 @@ export function deleteInvitee(inviteeId: number) {
       .get();
     if (!invitee) return undefined;
 
-    tx.delete(rsvpsTable).where(eq(rsvpsTable.inviteeId, inviteeId)).run();
-    tx.delete(inviteeAliasesTable)
-      .where(eq(inviteeAliasesTable.inviteeId, inviteeId))
-      .run();
-    tx.update(obligationsTable)
-      .set({ inviteeId: null })
-      .where(eq(obligationsTable.inviteeId, inviteeId))
-      .run();
-    tx.update(invitesTable)
-      .set({ createdBy: null })
-      .where(eq(invitesTable.createdBy, inviteeId))
-      .run();
-    tx.update(invitesTable)
-      .set({ redeemedBy: null })
-      .where(eq(invitesTable.redeemedBy, inviteeId))
-      .run();
-    tx.delete(inviteesTable).where(eq(inviteesTable.id, inviteeId)).run();
+    purgeInvitee(tx, inviteeId);
 
     deleteGroupIfEmpty(tx, invitee.inviteGroupId);
     return invitee;
+  });
+}
+
+// Invitees must belong to a group, so deleting a group deletes its guests too.
+export function deleteInviteGroup(inviteGroupId: number) {
+  return db.transaction((tx) => {
+    const group = tx
+      .select()
+      .from(inviteGroupsTable)
+      .where(eq(inviteGroupsTable.id, inviteGroupId))
+      .get();
+    if (!group) return undefined;
+
+    const members = tx
+      .select({ id: inviteesTable.id })
+      .from(inviteesTable)
+      .where(eq(inviteesTable.inviteGroupId, inviteGroupId))
+      .all();
+    for (const { id } of members) purgeInvitee(tx, id);
+
+    tx.delete(inviteGroupsTable)
+      .where(eq(inviteGroupsTable.id, inviteGroupId))
+      .run();
+    return group;
   });
 }

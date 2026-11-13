@@ -1,9 +1,12 @@
 import { AdminLoginForm } from "@/components/adminAuth/AdminLoginForm";
 import { redirectIfAdmin } from "@/routes/-guards";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { Page } from "@/ui/page";
-import { PageHeader } from "@/ui/page-header";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/ui/platform/card";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/")({
@@ -16,22 +19,22 @@ function AdminLogin() {
 
   const onSubmit = async () => {
     router.clearCache();
-    await router.navigate({ to: "/admin/home" });
+    await router.navigate({ to: "/admin/events" });
   };
 
   return (
-    <Page width="sm" className="pt-8">
-      <PageHeader
-        illustration={
-          <Illustration name="pie" animate="wobble" className="mx-auto w-32" />
-        }
-        eyebrow="Hosts only"
-        title="Kitchen Door"
-      />
-
-      <Card>
-        <AdminLoginForm onSubmit={onSubmit} />
+    <main className="flex flex-1 items-center justify-center p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Host sign in</CardTitle>
+          <CardDescription>
+            Hosts only. Guests RSVP with their invite link.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AdminLoginForm onSubmit={onSubmit} />
+        </CardContent>
       </Card>
-    </Page>
+    </main>
   );
 }

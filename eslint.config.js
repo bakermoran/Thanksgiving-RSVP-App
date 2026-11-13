@@ -48,6 +48,18 @@ const noServices = {
   message: "Repositories can't depend on services.",
 };
 
+const noGuestUi = {
+  group: ["@/ui/guest", "@/ui/guest/**"],
+  message:
+    "Platform (admin) screens use the shadcn kit (@/ui/platform), not the themed guest kit.",
+};
+
+const noPlatformUi = {
+  group: ["@/ui/platform", "@/ui/platform/**"],
+  message:
+    "Guest screens use the themed guest kit (@/ui/guest), not the platform kit.",
+};
+
 const restrictImports = (...patterns) => ({
   "@typescript-eslint/no-restricted-imports": ["error", { patterns }],
 });
@@ -89,6 +101,29 @@ export default defineConfig([
     files: ["src/routes/**", "src/components/**", "src/ui/**", "src/shared/**"],
     ignores: ["src/shared/types.ts"],
     rules: restrictImports(noServer, servicesIndexOnly),
+  },
+  {
+    name: "layers/platform-ui",
+    files: [
+      "src/ui/platform/**",
+      "src/routes/admin.tsx",
+      "src/routes/admin/**",
+      "src/components/admin/**",
+      "src/components/adminAuth/**",
+    ],
+    rules: restrictImports(noServer, servicesIndexOnly, noGuestUi),
+  },
+  {
+    name: "layers/guest-ui",
+    files: [
+      "src/ui/guest/**",
+      "src/routes/__root.tsx",
+      "src/routes/_guest.tsx",
+      "src/routes/_guest/**",
+      "src/components/**",
+    ],
+    ignores: ["src/components/admin/**", "src/components/adminAuth/**"],
+    rules: restrictImports(noServer, servicesIndexOnly, noPlatformUi),
   },
   {
     name: "layers/shared-types",

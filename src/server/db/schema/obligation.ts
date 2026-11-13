@@ -3,7 +3,7 @@ import { createSelectSchema } from "drizzle-orm/zod";
 import { type z } from "zod";
 
 import { baseColumns } from "./base";
-import { inviteesTable } from "./invitee";
+import { type Invitee, inviteesTable } from "./invitee";
 
 export const obligationsTable = sqliteTable(
   "obligations",
@@ -12,7 +12,7 @@ export const obligationsTable = sqliteTable(
     name: text().notNull(),
     inviteeId: int("invitee_id").references(() => inviteesTable.id),
     categoryId: int("category_id")
-      .references(() => obligationCategoriesTable.id)
+      .references(() => obligationCategoriesTable.id, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => [uniqueIndex("idx_obligations_name").on(table.name)],
@@ -38,3 +38,10 @@ export const obligationCategoriesSchema = createSelectSchema(
   obligationCategoriesTable,
 );
 export type ObligationCategory = z.infer<typeof obligationCategoriesSchema>;
+
+export type ObligationWithInvitee = Obligation & {
+  invitee: Invitee | null;
+};
+export type ObligationCategoryWithObligations = ObligationCategory & {
+  obligations: ObligationWithInvitee[];
+};

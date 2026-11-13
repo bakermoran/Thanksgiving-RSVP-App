@@ -3,20 +3,70 @@ import {
   obligationCategoriesTable,
   obligationsTable,
 } from "@/server/db/schema/obligation";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 
-export function getObligations() {
-  return db.query.obligationsTable.findMany({
-    orderBy: { id: "asc" },
-    with: { invitee: true, category: true },
+export function getObligationCategories() {
+  return db.query.obligationCategoriesTable.findMany({
+    orderBy: { sortOrder: "asc" },
+    with: { obligations: { orderBy: { id: "asc" }, with: { invitee: true } } },
   });
 }
 
-export function getObligationCategories() {
-  return db
-    .select()
-    .from(obligationCategoriesTable)
-    .orderBy(obligationCategoriesTable.sortOrder);
+export function createObligationCategory({ name }: { name: string }) {
+  return db.insert(obligationCategoriesTable).values({
+    name,
+    // New categories go last. Computed inside the insert so the unique
+    // sort_order index can't be hit by a read-then-write race.
+    sortOrder: sql`(select coalesce(max(${obligationCategoriesTable.sortOrder}), 0) + 1 from ${obligationCategoriesTable})`,
+  });
+}
+
+export async function renameObligationCategory({
+  id,
+  name,
+}: {
+  id: number;
+  name: string;
+}) {
+  const [renamed] = await db
+    .update(obligationCategoriesTable)
+    .set({ name })
+    .where(eq(obligationCategoriesTable.id, id))
+    .returning();
+
+  return renamed;
+}
+
+export async function renameObligation({
+  id,
+  name,
+}: {
+  id: number;
+  name: string;
+}) {
+  const [renamed] = await db
+    .update(obligationsTable)
+    .set({ name })
+    .where(eq(obligationsTable.id, id))
+    .returning();
+
+  return renamed;
+}
+
+// Deletes the category's obligations first, in the same transaction, rather
+// than relying on the FK's ON DELETE CASCADE existing in the live database.
+export function destroyObligationCategory({ id }: { id: number }) {
+  return db.transaction((tx) => {
+    tx.delete(obligationsTable)
+      .where(eq(obligationsTable.categoryId, id))
+      .run();
+
+    return tx
+      .delete(obligationCategoriesTable)
+      .where(eq(obligationCategoriesTable.id, id))
+      .returning()
+      .get();
+  });
 }
 
 export function createObligation({
@@ -77,4 +127,13 @@ export async function releaseObligation({
     .returning();
 
   return claimed;
+}
+
+export async function destroyObligation({ id }: { id: number }) {
+  const [deleted] = await db
+    .delete(obligationsTable)
+    .where(eq(obligationsTable.id, id))
+    .returning();
+
+  return deleted;
 }

@@ -9,24 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as RsvpRouteImport } from './routes/_rsvp'
+import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as RedeemRouteImport } from './routes/redeem'
-import { Route as RsvpHomeRouteImport } from './routes/_rsvp/home'
-import { Route as RsvpRsvpRouteImport } from './routes/_rsvp/rsvp'
+import { Route as GuestIndexRouteImport } from './routes/_guest/index'
+import { Route as GuestRsvpRouteImport } from './routes/_guest/_rsvp'
+import { Route as GuestRedeemRouteImport } from './routes/_guest/redeem'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuthedRouteImport } from './routes/admin/_authed'
-import { Route as RsvpEventsEventIdRouteImport } from './routes/_rsvp/events/$eventId'
-import { Route as AdminAuthedHomeRouteImport } from './routes/admin/_authed/home'
+import { Route as GuestRsvpHomeRouteImport } from './routes/_guest/_rsvp/home'
+import { Route as GuestRsvpRsvpRouteImport } from './routes/_guest/_rsvp/rsvp'
+import { Route as AdminAuthedGuestsRouteImport } from './routes/admin/_authed/guests'
+import { Route as AdminAuthedObligationsRouteImport } from './routes/admin/_authed/obligations'
+import { Route as GuestRsvpEventsEventIdRouteImport } from './routes/_guest/_rsvp/events/$eventId'
+import { Route as AdminAuthedEventsIndexRouteImport } from './routes/admin/_authed/events/index'
+import { Route as AdminAuthedEventsEventIdRouteImport } from './routes/admin/_authed/events/$eventId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RsvpRoute = RsvpRouteImport.update({
-  id: '/_rsvp',
+const GuestRoute = GuestRouteImport.update({
+  id: '/_guest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -34,20 +33,19 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RedeemRoute = RedeemRouteImport.update({
+const GuestIndexRoute = GuestIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GuestRoute,
+} as any)
+const GuestRsvpRoute = GuestRsvpRouteImport.update({
+  id: '/_rsvp',
+  getParentRoute: () => GuestRoute,
+} as any)
+const GuestRedeemRoute = GuestRedeemRouteImport.update({
   id: '/redeem',
   path: '/redeem',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RsvpHomeRoute = RsvpHomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => RsvpRoute,
-} as any)
-const RsvpRsvpRoute = RsvpRsvpRouteImport.update({
-  id: '/rsvp',
-  path: '/rsvp',
-  getParentRoute: () => RsvpRoute,
+  getParentRoute: () => GuestRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -58,48 +56,84 @@ const AdminAuthedRoute = AdminAuthedRouteImport.update({
   id: '/_authed',
   getParentRoute: () => AdminRoute,
 } as any)
-const RsvpEventsEventIdRoute = RsvpEventsEventIdRouteImport.update({
-  id: '/events/$eventId',
-  path: '/events/$eventId',
-  getParentRoute: () => RsvpRoute,
-} as any)
-const AdminAuthedHomeRoute = AdminAuthedHomeRouteImport.update({
+const GuestRsvpHomeRoute = GuestRsvpHomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => GuestRsvpRoute,
+} as any)
+const GuestRsvpRsvpRoute = GuestRsvpRsvpRouteImport.update({
+  id: '/rsvp',
+  path: '/rsvp',
+  getParentRoute: () => GuestRsvpRoute,
+} as any)
+const AdminAuthedGuestsRoute = AdminAuthedGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
   getParentRoute: () => AdminAuthedRoute,
 } as any)
+const AdminAuthedObligationsRoute = AdminAuthedObligationsRouteImport.update({
+  id: '/obligations',
+  path: '/obligations',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const GuestRsvpEventsEventIdRoute = GuestRsvpEventsEventIdRouteImport.update({
+  id: '/events/$eventId',
+  path: '/events/$eventId',
+  getParentRoute: () => GuestRsvpRoute,
+} as any)
+const AdminAuthedEventsIndexRoute = AdminAuthedEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedEventsEventIdRoute =
+  AdminAuthedEventsEventIdRouteImport.update({
+    id: '/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof GuestIndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/redeem': typeof RedeemRoute
-  '/home': typeof RsvpHomeRoute
-  '/rsvp': typeof RsvpRsvpRoute
+  '/redeem': typeof GuestRedeemRoute
   '/admin/': typeof AdminIndexRoute
-  '/events/$eventId': typeof RsvpEventsEventIdRoute
-  '/admin/home': typeof AdminAuthedHomeRoute
+  '/home': typeof GuestRsvpHomeRoute
+  '/rsvp': typeof GuestRsvpRsvpRoute
+  '/admin/guests': typeof AdminAuthedGuestsRoute
+  '/admin/obligations': typeof AdminAuthedObligationsRoute
+  '/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/admin/events/$eventId': typeof AdminAuthedEventsEventIdRoute
+  '/admin/events/': typeof AdminAuthedEventsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/redeem': typeof RedeemRoute
-  '/home': typeof RsvpHomeRoute
-  '/rsvp': typeof RsvpRsvpRoute
+  '/': typeof GuestIndexRoute
+  '/redeem': typeof GuestRedeemRoute
   '/admin': typeof AdminIndexRoute
-  '/events/$eventId': typeof RsvpEventsEventIdRoute
-  '/admin/home': typeof AdminAuthedHomeRoute
+  '/home': typeof GuestRsvpHomeRoute
+  '/rsvp': typeof GuestRsvpRsvpRoute
+  '/admin/guests': typeof AdminAuthedGuestsRoute
+  '/admin/obligations': typeof AdminAuthedObligationsRoute
+  '/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/admin/events/$eventId': typeof AdminAuthedEventsEventIdRoute
+  '/admin/events': typeof AdminAuthedEventsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_rsvp': typeof RsvpRouteWithChildren
+  '/_guest': typeof GuestRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
-  '/redeem': typeof RedeemRoute
-  '/_rsvp/home': typeof RsvpHomeRoute
-  '/_rsvp/rsvp': typeof RsvpRsvpRoute
+  '/_guest/_rsvp': typeof GuestRsvpRouteWithChildren
+  '/_guest/redeem': typeof GuestRedeemRoute
   '/admin/_authed': typeof AdminAuthedRouteWithChildren
+  '/_guest/': typeof GuestIndexRoute
   '/admin/': typeof AdminIndexRoute
-  '/_rsvp/events/$eventId': typeof RsvpEventsEventIdRoute
-  '/admin/_authed/home': typeof AdminAuthedHomeRoute
+  '/_guest/_rsvp/home': typeof GuestRsvpHomeRoute
+  '/_guest/_rsvp/rsvp': typeof GuestRsvpRsvpRoute
+  '/admin/_authed/guests': typeof AdminAuthedGuestsRoute
+  '/admin/_authed/obligations': typeof AdminAuthedObligationsRoute
+  '/_guest/_rsvp/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/admin/_authed/events/$eventId': typeof AdminAuthedEventsEventIdRoute
+  '/admin/_authed/events/': typeof AdminAuthedEventsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,55 +141,56 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/redeem'
+    | '/admin/'
     | '/home'
     | '/rsvp'
-    | '/admin/'
+    | '/admin/guests'
+    | '/admin/obligations'
     | '/events/$eventId'
-    | '/admin/home'
+    | '/admin/events/$eventId'
+    | '/admin/events/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/redeem'
+    | '/admin'
     | '/home'
     | '/rsvp'
-    | '/admin'
+    | '/admin/guests'
+    | '/admin/obligations'
     | '/events/$eventId'
-    | '/admin/home'
+    | '/admin/events/$eventId'
+    | '/admin/events'
   id:
     | '__root__'
-    | '/'
-    | '/_rsvp'
+    | '/_guest'
     | '/admin'
-    | '/redeem'
-    | '/_rsvp/home'
-    | '/_rsvp/rsvp'
+    | '/_guest/_rsvp'
+    | '/_guest/redeem'
     | '/admin/_authed'
+    | '/_guest/'
     | '/admin/'
-    | '/_rsvp/events/$eventId'
-    | '/admin/_authed/home'
+    | '/_guest/_rsvp/home'
+    | '/_guest/_rsvp/rsvp'
+    | '/admin/_authed/guests'
+    | '/admin/_authed/obligations'
+    | '/_guest/_rsvp/events/$eventId'
+    | '/admin/_authed/events/$eventId'
+    | '/admin/_authed/events/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  RsvpRoute: typeof RsvpRouteWithChildren
+  GuestRoute: typeof GuestRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
-  RedeemRoute: typeof RedeemRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_rsvp': {
-      id: '/_rsvp'
+    '/_guest': {
+      id: '/_guest'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof RsvpRouteImport
+      preLoaderRoute: typeof GuestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -165,26 +200,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/redeem': {
-      id: '/redeem'
+    '/_guest/': {
+      id: '/_guest/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof GuestIndexRouteImport
+      parentRoute: typeof GuestRoute
+    }
+    '/_guest/_rsvp': {
+      id: '/_guest/_rsvp'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof GuestRsvpRouteImport
+      parentRoute: typeof GuestRoute
+    }
+    '/_guest/redeem': {
+      id: '/_guest/redeem'
       path: '/redeem'
       fullPath: '/redeem'
-      preLoaderRoute: typeof RedeemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_rsvp/home': {
-      id: '/_rsvp/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof RsvpHomeRouteImport
-      parentRoute: typeof RsvpRoute
-    }
-    '/_rsvp/rsvp': {
-      id: '/_rsvp/rsvp'
-      path: '/rsvp'
-      fullPath: '/rsvp'
-      preLoaderRoute: typeof RsvpRsvpRouteImport
-      parentRoute: typeof RsvpRoute
+      preLoaderRoute: typeof GuestRedeemRouteImport
+      parentRoute: typeof GuestRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -200,43 +235,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/_rsvp/events/$eventId': {
-      id: '/_rsvp/events/$eventId'
+    '/_guest/_rsvp/home': {
+      id: '/_guest/_rsvp/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof GuestRsvpHomeRouteImport
+      parentRoute: typeof GuestRsvpRoute
+    }
+    '/_guest/_rsvp/rsvp': {
+      id: '/_guest/_rsvp/rsvp'
+      path: '/rsvp'
+      fullPath: '/rsvp'
+      preLoaderRoute: typeof GuestRsvpRsvpRouteImport
+      parentRoute: typeof GuestRsvpRoute
+    }
+    '/admin/_authed/guests': {
+      id: '/admin/_authed/guests'
+      path: '/guests'
+      fullPath: '/admin/guests'
+      preLoaderRoute: typeof AdminAuthedGuestsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/obligations': {
+      id: '/admin/_authed/obligations'
+      path: '/obligations'
+      fullPath: '/admin/obligations'
+      preLoaderRoute: typeof AdminAuthedObligationsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/_guest/_rsvp/events/$eventId': {
+      id: '/_guest/_rsvp/events/$eventId'
       path: '/events/$eventId'
       fullPath: '/events/$eventId'
-      preLoaderRoute: typeof RsvpEventsEventIdRouteImport
-      parentRoute: typeof RsvpRoute
+      preLoaderRoute: typeof GuestRsvpEventsEventIdRouteImport
+      parentRoute: typeof GuestRsvpRoute
     }
-    '/admin/_authed/home': {
-      id: '/admin/_authed/home'
-      path: '/home'
-      fullPath: '/admin/home'
-      preLoaderRoute: typeof AdminAuthedHomeRouteImport
+    '/admin/_authed/events/': {
+      id: '/admin/_authed/events/'
+      path: '/events'
+      fullPath: '/admin/events/'
+      preLoaderRoute: typeof AdminAuthedEventsIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/events/$eventId': {
+      id: '/admin/_authed/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/admin/events/$eventId'
+      preLoaderRoute: typeof AdminAuthedEventsEventIdRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
   }
 }
 
-interface RsvpRouteChildren {
-  RsvpHomeRoute: typeof RsvpHomeRoute
-  RsvpRsvpRoute: typeof RsvpRsvpRoute
-  RsvpEventsEventIdRoute: typeof RsvpEventsEventIdRoute
+interface GuestRsvpRouteChildren {
+  GuestRsvpHomeRoute: typeof GuestRsvpHomeRoute
+  GuestRsvpRsvpRoute: typeof GuestRsvpRsvpRoute
+  GuestRsvpEventsEventIdRoute: typeof GuestRsvpEventsEventIdRoute
 }
 
-const RsvpRouteChildren: RsvpRouteChildren = {
-  RsvpHomeRoute: RsvpHomeRoute,
-  RsvpRsvpRoute: RsvpRsvpRoute,
-  RsvpEventsEventIdRoute: RsvpEventsEventIdRoute,
+const GuestRsvpRouteChildren: GuestRsvpRouteChildren = {
+  GuestRsvpHomeRoute: GuestRsvpHomeRoute,
+  GuestRsvpRsvpRoute: GuestRsvpRsvpRoute,
+  GuestRsvpEventsEventIdRoute: GuestRsvpEventsEventIdRoute,
 }
 
-const RsvpRouteWithChildren = RsvpRoute._addFileChildren(RsvpRouteChildren)
+const GuestRsvpRouteWithChildren = GuestRsvpRoute._addFileChildren(
+  GuestRsvpRouteChildren,
+)
+
+interface GuestRouteChildren {
+  GuestRsvpRoute: typeof GuestRsvpRouteWithChildren
+  GuestRedeemRoute: typeof GuestRedeemRoute
+  GuestIndexRoute: typeof GuestIndexRoute
+}
+
+const GuestRouteChildren: GuestRouteChildren = {
+  GuestRsvpRoute: GuestRsvpRouteWithChildren,
+  GuestRedeemRoute: GuestRedeemRoute,
+  GuestIndexRoute: GuestIndexRoute,
+}
+
+const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)
 
 interface AdminAuthedRouteChildren {
-  AdminAuthedHomeRoute: typeof AdminAuthedHomeRoute
+  AdminAuthedGuestsRoute: typeof AdminAuthedGuestsRoute
+  AdminAuthedObligationsRoute: typeof AdminAuthedObligationsRoute
+  AdminAuthedEventsEventIdRoute: typeof AdminAuthedEventsEventIdRoute
+  AdminAuthedEventsIndexRoute: typeof AdminAuthedEventsIndexRoute
 }
 
 const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
-  AdminAuthedHomeRoute: AdminAuthedHomeRoute,
+  AdminAuthedGuestsRoute: AdminAuthedGuestsRoute,
+  AdminAuthedObligationsRoute: AdminAuthedObligationsRoute,
+  AdminAuthedEventsEventIdRoute: AdminAuthedEventsEventIdRoute,
+  AdminAuthedEventsIndexRoute: AdminAuthedEventsIndexRoute,
 }
 
 const AdminAuthedRouteWithChildren = AdminAuthedRoute._addFileChildren(
@@ -256,10 +348,8 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  RsvpRoute: RsvpRouteWithChildren,
+  GuestRoute: GuestRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
-  RedeemRoute: RedeemRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

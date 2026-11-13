@@ -4,10 +4,10 @@ import { RsvpBanner } from "@/components/rsvps/RsvpBanner";
 import { getEvents } from "@/functions/events.functions";
 import { getMyInviteGroup } from "@/functions/inviteGroups.functions";
 import { requireSession } from "@/routes/-guards";
-import { Page } from "@/ui/page";
+import { Page } from "@/ui/guest/page";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_rsvp")({
+export const Route = createFileRoute("/_guest/_rsvp")({
   beforeLoad: requireSession,
   loader: async () => {
     const [inviteGroup, events] = await Promise.all([

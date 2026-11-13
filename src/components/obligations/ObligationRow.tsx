@@ -4,10 +4,10 @@ import {
 } from "@/functions/obligations.functions";
 import type { Invitee } from "@/shared/types";
 import type { Obligation } from "@/shared/types";
-import { Badge } from "@/ui/badge";
-import { Button } from "@/ui/button";
-import { cn } from "@/ui/cn";
-import { ListItem } from "@/ui/list";
+import { Badge } from "@/ui/guest/badge";
+import { Button } from "@/ui/guest/button";
+import { cn } from "@/ui/guest/cn";
+import { ListItem } from "@/ui/guest/list";
 import { useRouter } from "@tanstack/react-router";
 
 export type ObligationWithInvitee = Obligation & { invitee: Invitee | null };
@@ -15,11 +15,13 @@ export type ObligationWithInvitee = Obligation & { invitee: Invitee | null };
 interface ObligationRowProps {
   obligation: ObligationWithInvitee;
   inviteeId: number;
+  onDestroy?: (id: number) => void;
 }
 
 export const ObligationRow = ({
   obligation,
   inviteeId,
+  onDestroy,
 }: ObligationRowProps) => {
   const router = useRouter();
   const { invitee } = obligation;
@@ -71,6 +73,11 @@ export const ObligationRow = ({
       ) : (
         <Button size="sm" onClick={claim}>
           I'll bring it
+        </Button>
+      )}
+      {onDestroy && (
+        <Button size="sm" onClick={() => onDestroy(obligation.id)}>
+          Delete
         </Button>
       )}
     </ListItem>

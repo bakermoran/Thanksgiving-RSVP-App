@@ -1,11 +1,11 @@
 import { GetInviteeForm } from "@/components/invitees/GetInviteeForm";
 import { HarvestRow } from "@/components/layout/HarvestRow";
 import { redirectIfLoggedIn } from "@/routes/-guards";
-import { Alert } from "@/ui/alert";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { Page } from "@/ui/page";
-import { PageHeader } from "@/ui/page-header";
+import { Alert } from "@/ui/guest/alert";
+import { Card } from "@/ui/guest/card";
+import { Illustration } from "@/ui/guest/illustration";
+import { Page } from "@/ui/guest/page";
+import { PageHeader } from "@/ui/guest/page-header";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -19,7 +19,7 @@ const flashMessages = {
 
 type FlashKey = keyof typeof flashMessages;
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_guest/")({
   validateSearch: z.object({
     error: z
       .enum(Object.keys(flashMessages) as [FlashKey, ...FlashKey[]])

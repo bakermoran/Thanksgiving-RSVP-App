@@ -3,10 +3,10 @@ import { mapsLink, toAddressString } from "@/shared/address";
 import { formatEventTimeRange } from "@/shared/date";
 import type { Event } from "@/shared/types";
 import type { Invitee } from "@/shared/types";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { Link } from "@/ui/link";
-import { ListItem } from "@/ui/list";
+import { Card } from "@/ui/guest/card";
+import { Illustration } from "@/ui/guest/illustration";
+import { Link } from "@/ui/guest/link";
+import { ListItem } from "@/ui/guest/list";
 
 interface EventSummaryCardProps {
   event: Event;

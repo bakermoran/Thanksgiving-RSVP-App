@@ -1,4 +1,4 @@
-import { Illustration } from "@/ui/illustration";
+import { Illustration } from "@/ui/guest/illustration";
 import { Link } from "@tanstack/react-router";
 
 export const RsvpBanner = () => (

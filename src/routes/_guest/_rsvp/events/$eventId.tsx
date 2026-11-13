@@ -7,10 +7,10 @@ import {
 import { mapsLink, toAddressString } from "@/shared/address";
 import { formatEventTimeRange } from "@/shared/date";
 import type { Event } from "@/shared/types";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { Link } from "@/ui/link";
-import { PageHeader } from "@/ui/page-header";
+import { Card } from "@/ui/guest/card";
+import { Illustration } from "@/ui/guest/illustration";
+import { Link } from "@/ui/guest/link";
+import { PageHeader } from "@/ui/guest/page-header";
 import {
   createFileRoute,
   getRouteApi,
@@ -18,9 +18,9 @@ import {
 } from "@tanstack/react-router";
 import { z } from "zod";
 
-const rsvpLayout = getRouteApi("/_rsvp");
+const rsvpLayout = getRouteApi("/_guest/_rsvp");
 
-export const Route = createFileRoute("/_rsvp/events/$eventId")({
+export const Route = createFileRoute("/_guest/_rsvp/events/$eventId")({
   params: {
     parse: (p) => ({
       eventId: z.coerce.number().int().parse(p.eventId),

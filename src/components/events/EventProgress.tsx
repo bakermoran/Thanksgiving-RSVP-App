@@ -1,5 +1,5 @@
 import type { Event } from "@/shared/types";
-import { cn } from "@/ui/cn";
+import { cn } from "@/ui/guest/cn";
 
 interface EventProgressProps {
   events: Event[];

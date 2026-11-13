@@ -1,11 +1,11 @@
 import { saveRsvps } from "@/functions/rsvps.functions";
 import { saveRsvpsSchema } from "@/shared/schemas/rsvps";
 import type { Invitee } from "@/shared/types";
-import { Alert } from "@/ui/alert";
-import { Button } from "@/ui/button";
-import { Fieldset } from "@/ui/fieldset";
-import { Form } from "@/ui/form";
-import { RadioCard } from "@/ui/radio-card";
+import { Alert } from "@/ui/guest/alert";
+import { Button } from "@/ui/guest/button";
+import { Fieldset } from "@/ui/guest/fieldset";
+import { Form } from "@/ui/guest/form";
+import { RadioCard } from "@/ui/guest/radio-card";
 import { useForm } from "@tanstack/react-form-start";
 import { useState } from "react";
 

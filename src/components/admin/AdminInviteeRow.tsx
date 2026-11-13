@@ -1,11 +1,13 @@
 import { groupLabel } from "@/components/admin/groupLabel";
 import { moveInvitee, removeInvitee } from "@/functions/admin.functions";
-import { type InviteGroupWithInvitees } from "@/shared/types";
-import { type Invitee } from "@/shared/types";
-import { Button } from "@/ui/button";
-import { ListItem } from "@/ui/list";
+import { type InviteGroupWithInvitees, type Invitee } from "@/shared/types";
+import { Button } from "@/ui/platform/button";
+import { NativeSelect } from "@/ui/platform/native-select";
 import { useRouter } from "@tanstack/react-router";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
+
+import { EditableInviteeName } from "./EditableInviteeName";
 
 const NEW_GROUP = "new";
 
@@ -19,24 +21,26 @@ export const AdminInviteeRow = ({
   inviteGroups,
 }: AdminInviteeRowProps) => {
   const router = useRouter();
-  const [isMoving, setIsMoving] = useState(false);
+  const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fullName = `${invitee.firstName} ${invitee.lastName}`;
 
   const run = async (action: () => Promise<unknown>) => {
     setError(null);
+    setIsBusy(true);
     try {
       await action();
       await router.invalidate();
     } catch (error) {
       console.error(error);
       setError("That didn't work. Please try again.");
+    } finally {
+      setIsBusy(false);
     }
   };
 
-  const onMove = async (value: string) => {
-    setIsMoving(true);
-    await run(() =>
+  const onMove = (value: string) =>
+    run(() =>
       moveInvitee({
         data: {
           inviteeId: invitee.id,
@@ -44,8 +48,6 @@ export const AdminInviteeRow = ({
         },
       }),
     );
-    setIsMoving(false);
-  };
 
   const onRemove = () => {
     if (
@@ -59,18 +61,18 @@ export const AdminInviteeRow = ({
   };
 
   return (
-    <ListItem className="py-2 text-base">
-      <span className="min-w-0 flex-1 basis-32">{fullName}</span>
+    <li className="flex flex-wrap items-center gap-2 py-2 text-sm">
+      <EditableInviteeName invitee={invitee} />
 
       <label className="sr-only" htmlFor={`move-${invitee.id}`}>
         Move {fullName} to
       </label>
-      <select
+      <NativeSelect
         id={`move-${invitee.id}`}
         value={invitee.inviteGroupId}
-        disabled={isMoving}
+        disabled={isBusy}
         onChange={(e) => onMove(e.target.value)}
-        className="max-w-48 rounded-full border-3 border-bark bg-white px-3 py-1 text-sm font-semibold text-bark shadow-chunky-sm focus:ring-4 focus:ring-mustard focus:outline-none disabled:opacity-60"
+        className="max-w-44"
       >
         {inviteGroups.map((group) => (
           <option key={group.id} value={group.id}>
@@ -78,22 +80,24 @@ export const AdminInviteeRow = ({
           </option>
         ))}
         <option value={NEW_GROUP}>New group</option>
-      </select>
+      </NativeSelect>
 
       <Button
         variant="ghost"
-        size="sm"
+        size="icon-sm"
+        disabled={isBusy}
         onClick={onRemove}
         aria-label={`Remove ${fullName}`}
+        className="text-muted-foreground hover:text-destructive"
       >
-        Remove
+        <Trash2 />
       </Button>
 
       {error && (
-        <p role="alert" className="w-full text-sm font-semibold text-cranberry">
+        <p role="alert" className="w-full text-xs text-destructive">
           {error}
         </p>
       )}
-    </ListItem>
+    </li>
   );
 };

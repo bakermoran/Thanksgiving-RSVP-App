@@ -21,5 +21,5 @@ export async function requireAdmin() {
 
 export async function redirectIfAdmin() {
   const admin = await getCurrentAdmin();
-  if (admin) throw redirect({ to: "/admin/home" });
+  if (admin) throw redirect({ to: "/admin/events" });
 }

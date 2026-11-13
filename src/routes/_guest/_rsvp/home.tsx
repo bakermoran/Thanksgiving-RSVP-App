@@ -1,27 +1,23 @@
 import { EventSummaryCard } from "@/components/home/EventSummaryCard";
 import { Stat } from "@/components/home/Stat";
 import { ObligationList } from "@/components/obligations/ObligationList";
-import {
-  getObligationCategories,
-  getObligations,
-} from "@/functions/obligations.functions";
+import { getObligationCategories } from "@/functions/obligations.functions";
 import { getMyRsvps } from "@/functions/rsvps.functions";
-import { Card } from "@/ui/card";
-import { Illustration } from "@/ui/illustration";
-import { PageHeader } from "@/ui/page-header";
+import { Card } from "@/ui/guest/card";
+import { Illustration } from "@/ui/guest/illustration";
+import { PageHeader } from "@/ui/guest/page-header";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
-const rsvpLayout = getRouteApi("/_rsvp");
+const rsvpLayout = getRouteApi("/_guest/_rsvp");
 
-export const Route = createFileRoute("/_rsvp/home")({
+export const Route = createFileRoute("/_guest/_rsvp/home")({
   loader: async () => {
-    const [obligations, categories, rsvps] = await Promise.all([
-      getObligations(),
+    const [categories, rsvps] = await Promise.all([
       getObligationCategories(),
       getMyRsvps(),
     ]);
 
-    return { obligations, categories, rsvps };
+    return { categories, rsvps };
   },
   gcTime: 0,
   component: Home,
@@ -42,7 +38,7 @@ const SectionHeading = ({
 
 function Home() {
   const { inviteGroup, events } = rsvpLayout.useLoaderData();
-  const { obligations, categories, rsvps } = Route.useLoaderData();
+  const { categories, rsvps } = Route.useLoaderData();
   const { inviteeId } = Route.useRouteContext().session;
   const { invitees } = inviteGroup;
 
@@ -59,10 +55,12 @@ function Home() {
     const responses = responsesFor(event.id);
     return invitees.every((i) => responses.has(i.id));
   }).length;
-  const dishesClaimed = obligations.filter((o) => o.invitee).length;
-  const myDishes = obligations.filter(
-    (o) => o.invitee?.id === inviteeId,
-  ).length;
+  const dishesClaimed = categories
+    .map((c) => c.obligations.filter((o) => o.invitee).length)
+    .reduce((a, b) => a + b, 0);
+  const myDishes = categories
+    .flatMap((c) => c.obligations)
+    .filter((o) => o.invitee?.id === inviteeId).length;
 
   return (
     <div className="space-y-14">
@@ -84,7 +82,7 @@ function Home() {
             label="events RSVP'd"
           />
           <Stat
-            value={`${dishesClaimed}/${obligations.length}`}
+            value={`${dishesClaimed}/${categories.flatMap((c) => c.obligations).length}`}
             label="dishes claimed"
           />
           <Stat
@@ -119,11 +117,7 @@ function Home() {
           eyebrow="What's on the menu"
           title="Who's bringing what"
         />
-        <ObligationList
-          obligations={obligations}
-          categories={categories}
-          inviteeId={inviteeId}
-        />
+        <ObligationList categories={categories} inviteeId={inviteeId} />
       </section>
     </div>
   );

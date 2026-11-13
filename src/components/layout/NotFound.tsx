@@ -1,7 +1,7 @@
-import { Illustration } from "@/ui/illustration";
-import { Link } from "@/ui/link";
-import { Page } from "@/ui/page";
-import { PageHeader } from "@/ui/page-header";
+import { Illustration } from "@/ui/guest/illustration";
+import { Link } from "@/ui/guest/link";
+import { Page } from "@/ui/guest/page";
+import { PageHeader } from "@/ui/guest/page-header";
 
 export const NotFound = () => {
   return (

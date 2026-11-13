@@ -1,0 +1,16 @@
+- Tenancy for different event
+  - Per "Gathering" (meta model for grouping of events?) settings
+  - Invite or add users to your gatherings
+  - Create account and create gatherings flows
+- Extract styling engine
+- Explicit ordering, and drag to reorder for obligations
+- event info
+- descriptions
+- announcements feed
+  - later plug in to email and phone
+- invitees are per event
+- Event settings
+  - Let invitees add obligations
+  - etc
+
+- Should obligations be per event?
