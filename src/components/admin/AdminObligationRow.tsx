@@ -2,7 +2,10 @@ import { renameObligation } from "@/functions/admin.functions";
 import type { ObligationWithInvitee } from "@/shared/types";
 import { Badge } from "@/ui/platform/badge";
 import { Button } from "@/ui/platform/button";
-import { Trash2 } from "lucide-react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { cn } from "cn";
+import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { EditableName } from "./EditableName";
@@ -16,6 +19,15 @@ export const AdminObligationRow = ({
 }) => {
   const [isBusy, setIsBusy] = useState(false);
   const { invitee } = obligation;
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: obligation.id });
 
   const onClick = async () => {
     setIsBusy(true);
@@ -27,7 +39,26 @@ export const AdminObligationRow = ({
   };
 
   return (
-    <li className="flex items-center gap-3 py-2 text-sm">
+    <li
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={cn(
+        "flex items-center gap-3 bg-card py-2 text-sm",
+        isDragging && "relative z-10 shadow-md",
+      )}
+    >
+      <Button
+        ref={setActivatorNodeRef}
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        aria-label={`Reorder ${obligation.name}`}
+        className="-ml-2 cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical />
+      </Button>
       <div className="min-w-0 flex-1">
         <EditableName
           name={obligation.name}

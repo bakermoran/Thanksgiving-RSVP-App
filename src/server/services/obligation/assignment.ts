@@ -36,6 +36,24 @@ export async function rename({ id, name }: { id: number; name: string }) {
   return obligationRepository.renameObligation({ id, name });
 }
 
+export async function reorder({
+  categoryId,
+  ids,
+}: {
+  categoryId: number;
+  ids: number[];
+}) {
+  const existing =
+    await obligationRepository.getObligationIdsForCategory(categoryId);
+  const isComplete =
+    ids.length === existing.length && existing.every((id) => ids.includes(id));
+  if (!isComplete) {
+    throw new Error("Items changed. Refresh the page and try again.");
+  }
+
+  return obligationRepository.reorderObligations({ ids });
+}
+
 export async function destroy({ id }: { id: number }) {
   return obligationRepository.destroyObligation({ id });
 }

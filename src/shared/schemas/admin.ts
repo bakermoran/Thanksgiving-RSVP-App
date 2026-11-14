@@ -98,3 +98,11 @@ export const reorderObligationCategoriesSchema = z.object({
 export const renameObligationSchema = addObligationSchema
   .pick({ name: true })
   .extend({ id: z.number().int().positive() });
+
+export const reorderObligationsSchema = z.object({
+  categoryId: z.number().int().positive(),
+  ids: z
+    .array(z.number().int().positive())
+    .min(1)
+    .refine((ids) => new Set(ids).size === ids.length, "Duplicate item"),
+});

@@ -5,6 +5,7 @@ export {
   destroy,
   release,
   rename,
+  reorder,
 } from "./assignment";
 export {
   createCategory,

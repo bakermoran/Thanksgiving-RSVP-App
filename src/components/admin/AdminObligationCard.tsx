@@ -22,8 +22,8 @@ import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { AddObligationForm } from "./AddObligationForm";
-import { AdminObligationRow } from "./AdminObligationRow";
 import { EditableName } from "./EditableName";
+import { SortableObligationList } from "./SortableObligationList";
 
 interface AdminObligationListProps {
   category: ObligationCategoryWithObligations;
@@ -75,7 +75,7 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
     <Card
       key={category.id}
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(isDragging && "relative z-10 shadow-lg")}
     >
       <CardHeader>
@@ -126,15 +126,11 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
           </p>
         )}
         {category.obligations.length ? (
-          <ul className="divide-y">
-            {category.obligations.map((obligation) => (
-              <AdminObligationRow
-                key={obligation.id}
-                obligation={obligation}
-                onDestroy={onDestroy}
-              />
-            ))}
-          </ul>
+          <SortableObligationList
+            categoryId={category.id}
+            obligations={category.obligations}
+            onDestroy={onDestroy}
+          />
         ) : (
           <p className="text-sm text-muted-foreground">Nothing here yet.</p>
         )}

@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/ui/platform/card";
+import { ScrollArea } from "@/ui/platform/scroll-area";
 import { useRouter } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -79,15 +80,17 @@ export const InviteGroupCard = ({
           </p>
         )}
         {count ? (
-          <ul className="divide-y">
-            {group.invitees.map((invitee) => (
-              <AdminInviteeRow
-                key={invitee.id}
-                invitee={invitee}
-                inviteGroups={inviteGroups}
-              />
-            ))}
-          </ul>
+          <ScrollArea viewportClassName="h-96">
+            <ul className="divide-y">
+              {group.invitees.map((invitee) => (
+                <AdminInviteeRow
+                  key={invitee.id}
+                  invitee={invitee}
+                  inviteGroups={inviteGroups}
+                />
+              ))}
+            </ul>
+          </ScrollArea>
         ) : (
           <p className="text-sm text-muted-foreground">Nobody here yet.</p>
         )}

@@ -3,12 +3,14 @@ import {
   obligationCategoriesTable,
   obligationsTable,
 } from "@/server/db/schema/obligation";
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 export function getObligationCategories() {
   return db.query.obligationCategoriesTable.findMany({
     orderBy: { sortOrder: "asc" },
-    with: { obligations: { orderBy: { id: "asc" }, with: { invitee: true } } },
+    with: {
+      obligations: { orderBy: { sortOrder: "asc" }, with: { invitee: true } },
+    },
   });
 }
 
@@ -101,13 +103,45 @@ export function createObligation({
     name,
     inviteeId,
     categoryId,
+    sortOrder: sql`(select coalesce(max(${obligationsTable.sortOrder}), 0) + 1 from ${obligationsTable})`,
+  });
+}
+
+export async function getObligationIdsForCategory(categoryId: number) {
+  const rows = await db
+    .select({ id: obligationsTable.id })
+    .from(obligationsTable)
+    .where(eq(obligationsTable.categoryId, categoryId));
+
+  return rows.map((row) => row.id);
+}
+
+export function reorderObligations({ ids }: { ids: number[] }) {
+  return db.transaction((tx) => {
+    const sortOrders = tx
+      .select({ sortOrder: obligationsTable.sortOrder })
+      .from(obligationsTable)
+      .where(inArray(obligationsTable.id, ids))
+      .orderBy(asc(obligationsTable.sortOrder))
+      .all()
+      .map((row) => row.sortOrder);
+
+    const setSortOrder = (id: number, sortOrder: number) =>
+      tx
+        .update(obligationsTable)
+        .set({ sortOrder })
+        .where(eq(obligationsTable.id, id))
+        .run();
+
+    ids.forEach((id, index) => setSortOrder(id, -sortOrders[index]));
+    ids.forEach((id, index) => setSortOrder(id, sortOrders[index]));
   });
 }
 
 export function getObligationsForInviteGroup(inviteGroupId: number) {
   return db.query.obligationsTable.findMany({
     where: { invitee: { inviteGroupId } },
-    orderBy: { id: "asc" },
+    orderBy: { sortOrder: "asc" },
   });
 }
 

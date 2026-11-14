@@ -59,6 +59,7 @@ await seed(db, schema, { seed: 1 }).refine((f) => ({
     count: 10,
     columns: {
       name: f.loremIpsum({ sentencesCount: 1 }),
+      sortOrder: f.int({ minValue: 1, maxValue: 100, isUnique: true }),
       createdAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
       updatedAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
     },

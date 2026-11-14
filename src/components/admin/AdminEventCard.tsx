@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/ui/platform/card";
+import { ScrollArea } from "@/ui/platform/scroll-area";
 import { Link, useRouter } from "@tanstack/react-router";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -128,28 +129,30 @@ export const AdminEventCard = ({
           <Stat value={pending} label="No response" />
         </div>
 
-        <div className="space-y-4">
-          {inviteGroups.map((group) => (
-            <div key={group.id}>
-              <p className="mb-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                {groupLabel(group)}
-              </p>
-              <ul className="divide-y">
-                {group.invitees.map((invitee) => (
-                  <li
-                    key={invitee.id}
-                    className="flex items-center justify-between gap-3 py-1.5 text-sm"
-                  >
-                    <span>
-                      {invitee.firstName} {invitee.lastName}
-                    </span>
-                    <ResponseBadge isAttending={responses.get(invitee.id)} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <ScrollArea viewportClassName="max-h-96">
+          <div className="space-y-4">
+            {inviteGroups.map((group) => (
+              <div key={group.id}>
+                <p className="mb-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                  {groupLabel(group)}
+                </p>
+                <ul className="divide-y">
+                  {group.invitees.map((invitee) => (
+                    <li
+                      key={invitee.id}
+                      className="flex items-center justify-between gap-3 py-1.5 text-sm"
+                    >
+                      <span>
+                        {invitee.firstName} {invitee.lastName}
+                      </span>
+                      <ResponseBadge isAttending={responses.get(invitee.id)} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

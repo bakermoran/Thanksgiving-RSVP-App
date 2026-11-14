@@ -78,7 +78,6 @@ const RenameInviteeForm = ({
   });
 
   return (
-    // Full width, so inside the wrapping row it takes its own line.
     <Form form={form} className="w-full space-y-1 font-normal">
       <div className="flex flex-wrap items-start gap-2">
         {nameFields.map(({ name, label, placeholder }) => (

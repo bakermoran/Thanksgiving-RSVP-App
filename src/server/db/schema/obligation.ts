@@ -14,8 +14,12 @@ export const obligationsTable = sqliteTable(
     categoryId: int("category_id")
       .references(() => obligationCategoriesTable.id, { onDelete: "cascade" })
       .notNull(),
+    sortOrder: int("sort_order").notNull(),
   },
-  (table) => [uniqueIndex("idx_obligations_name").on(table.name)],
+  (table) => [
+    uniqueIndex("idx_obligations_name").on(table.name),
+    uniqueIndex("idx_obligations_sort_order").on(table.sortOrder),
+  ],
 );
 
 export const obligationCategoriesTable = sqliteTable(
