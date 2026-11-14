@@ -11,18 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as GuestIndexRouteImport } from './routes/_guest/index'
-import { Route as GuestRsvpRouteImport } from './routes/_guest/_rsvp'
-import { Route as GuestRedeemRouteImport } from './routes/_guest/redeem'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuthedRouteImport } from './routes/admin/_authed'
-import { Route as GuestRsvpHomeRouteImport } from './routes/_guest/_rsvp/home'
-import { Route as GuestRsvpRsvpRouteImport } from './routes/_guest/_rsvp/rsvp'
+import { Route as GuestGatheringIdIndexRouteImport } from './routes/_guest/$gatheringId/index'
+import { Route as GuestGatheringIdRsvpRouteImport } from './routes/_guest/$gatheringId/_rsvp'
+import { Route as GuestGatheringIdRedeemRouteImport } from './routes/_guest/$gatheringId/redeem'
 import { Route as AdminAuthedGuestsRouteImport } from './routes/admin/_authed/guests'
 import { Route as AdminAuthedObligationsRouteImport } from './routes/admin/_authed/obligations'
-import { Route as GuestRsvpEventsEventIdRouteImport } from './routes/_guest/_rsvp/events/$eventId'
+import { Route as GuestGatheringIdRsvpHomeRouteImport } from './routes/_guest/$gatheringId/_rsvp/home'
+import { Route as GuestGatheringIdRsvpRsvpRouteImport } from './routes/_guest/$gatheringId/_rsvp/rsvp'
 import { Route as AdminAuthedEventsIndexRouteImport } from './routes/admin/_authed/events/index'
 import { Route as AdminAuthedEventsEventIdRouteImport } from './routes/admin/_authed/events/$eventId'
+import { Route as GuestGatheringIdRsvpEventsEventIdRouteImport } from './routes/_guest/$gatheringId/_rsvp/events/$eventId'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -33,20 +33,6 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuestIndexRoute = GuestIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => GuestRoute,
-} as any)
-const GuestRsvpRoute = GuestRsvpRouteImport.update({
-  id: '/_rsvp',
-  getParentRoute: () => GuestRoute,
-} as any)
-const GuestRedeemRoute = GuestRedeemRouteImport.update({
-  id: '/redeem',
-  path: '/redeem',
-  getParentRoute: () => GuestRoute,
-} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -56,15 +42,20 @@ const AdminAuthedRoute = AdminAuthedRouteImport.update({
   id: '/_authed',
   getParentRoute: () => AdminRoute,
 } as any)
-const GuestRsvpHomeRoute = GuestRsvpHomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => GuestRsvpRoute,
+const GuestGatheringIdIndexRoute = GuestGatheringIdIndexRouteImport.update({
+  id: '/$gatheringId/',
+  path: '/$gatheringId/',
+  getParentRoute: () => GuestRoute,
 } as any)
-const GuestRsvpRsvpRoute = GuestRsvpRsvpRouteImport.update({
-  id: '/rsvp',
-  path: '/rsvp',
-  getParentRoute: () => GuestRsvpRoute,
+const GuestGatheringIdRsvpRoute = GuestGatheringIdRsvpRouteImport.update({
+  id: '/$gatheringId/_rsvp',
+  path: '/$gatheringId',
+  getParentRoute: () => GuestRoute,
+} as any)
+const GuestGatheringIdRedeemRoute = GuestGatheringIdRedeemRouteImport.update({
+  id: '/$gatheringId/redeem',
+  path: '/$gatheringId/redeem',
+  getParentRoute: () => GuestRoute,
 } as any)
 const AdminAuthedGuestsRoute = AdminAuthedGuestsRouteImport.update({
   id: '/guests',
@@ -76,11 +67,18 @@ const AdminAuthedObligationsRoute = AdminAuthedObligationsRouteImport.update({
   path: '/obligations',
   getParentRoute: () => AdminAuthedRoute,
 } as any)
-const GuestRsvpEventsEventIdRoute = GuestRsvpEventsEventIdRouteImport.update({
-  id: '/events/$eventId',
-  path: '/events/$eventId',
-  getParentRoute: () => GuestRsvpRoute,
-} as any)
+const GuestGatheringIdRsvpHomeRoute =
+  GuestGatheringIdRsvpHomeRouteImport.update({
+    id: '/home',
+    path: '/home',
+    getParentRoute: () => GuestGatheringIdRsvpRoute,
+  } as any)
+const GuestGatheringIdRsvpRsvpRoute =
+  GuestGatheringIdRsvpRsvpRouteImport.update({
+    id: '/rsvp',
+    path: '/rsvp',
+    getParentRoute: () => GuestGatheringIdRsvpRoute,
+  } as any)
 const AdminAuthedEventsIndexRoute = AdminAuthedEventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -92,91 +90,103 @@ const AdminAuthedEventsEventIdRoute =
     path: '/events/$eventId',
     getParentRoute: () => AdminAuthedRoute,
   } as any)
+const GuestGatheringIdRsvpEventsEventIdRoute =
+  GuestGatheringIdRsvpEventsEventIdRouteImport.update({
+    id: '/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => GuestGatheringIdRsvpRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof GuestIndexRoute
+  '/': typeof GuestRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
-  '/redeem': typeof GuestRedeemRoute
   '/admin/': typeof AdminIndexRoute
-  '/home': typeof GuestRsvpHomeRoute
-  '/rsvp': typeof GuestRsvpRsvpRoute
+  '/$gatheringId': typeof GuestGatheringIdRsvpRouteWithChildren
+  '/$gatheringId/redeem': typeof GuestGatheringIdRedeemRoute
   '/admin/guests': typeof AdminAuthedGuestsRoute
   '/admin/obligations': typeof AdminAuthedObligationsRoute
-  '/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/$gatheringId/': typeof GuestGatheringIdIndexRoute
+  '/$gatheringId/home': typeof GuestGatheringIdRsvpHomeRoute
+  '/$gatheringId/rsvp': typeof GuestGatheringIdRsvpRsvpRoute
   '/admin/events/$eventId': typeof AdminAuthedEventsEventIdRoute
   '/admin/events/': typeof AdminAuthedEventsIndexRoute
+  '/$gatheringId/events/$eventId': typeof GuestGatheringIdRsvpEventsEventIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof GuestIndexRoute
-  '/redeem': typeof GuestRedeemRoute
+  '/': typeof GuestRouteWithChildren
   '/admin': typeof AdminIndexRoute
-  '/home': typeof GuestRsvpHomeRoute
-  '/rsvp': typeof GuestRsvpRsvpRoute
+  '/$gatheringId': typeof GuestGatheringIdIndexRoute
+  '/$gatheringId/redeem': typeof GuestGatheringIdRedeemRoute
   '/admin/guests': typeof AdminAuthedGuestsRoute
   '/admin/obligations': typeof AdminAuthedObligationsRoute
-  '/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/$gatheringId/home': typeof GuestGatheringIdRsvpHomeRoute
+  '/$gatheringId/rsvp': typeof GuestGatheringIdRsvpRsvpRoute
   '/admin/events/$eventId': typeof AdminAuthedEventsEventIdRoute
   '/admin/events': typeof AdminAuthedEventsIndexRoute
+  '/$gatheringId/events/$eventId': typeof GuestGatheringIdRsvpEventsEventIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_guest': typeof GuestRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
-  '/_guest/_rsvp': typeof GuestRsvpRouteWithChildren
-  '/_guest/redeem': typeof GuestRedeemRoute
   '/admin/_authed': typeof AdminAuthedRouteWithChildren
-  '/_guest/': typeof GuestIndexRoute
   '/admin/': typeof AdminIndexRoute
-  '/_guest/_rsvp/home': typeof GuestRsvpHomeRoute
-  '/_guest/_rsvp/rsvp': typeof GuestRsvpRsvpRoute
+  '/_guest/$gatheringId/_rsvp': typeof GuestGatheringIdRsvpRouteWithChildren
+  '/_guest/$gatheringId/redeem': typeof GuestGatheringIdRedeemRoute
   '/admin/_authed/guests': typeof AdminAuthedGuestsRoute
   '/admin/_authed/obligations': typeof AdminAuthedObligationsRoute
-  '/_guest/_rsvp/events/$eventId': typeof GuestRsvpEventsEventIdRoute
+  '/_guest/$gatheringId/': typeof GuestGatheringIdIndexRoute
+  '/_guest/$gatheringId/_rsvp/home': typeof GuestGatheringIdRsvpHomeRoute
+  '/_guest/$gatheringId/_rsvp/rsvp': typeof GuestGatheringIdRsvpRsvpRoute
   '/admin/_authed/events/$eventId': typeof AdminAuthedEventsEventIdRoute
   '/admin/_authed/events/': typeof AdminAuthedEventsIndexRoute
+  '/_guest/$gatheringId/_rsvp/events/$eventId': typeof GuestGatheringIdRsvpEventsEventIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
-    | '/redeem'
     | '/admin/'
-    | '/home'
-    | '/rsvp'
+    | '/$gatheringId'
+    | '/$gatheringId/redeem'
     | '/admin/guests'
     | '/admin/obligations'
-    | '/events/$eventId'
+    | '/$gatheringId/'
+    | '/$gatheringId/home'
+    | '/$gatheringId/rsvp'
     | '/admin/events/$eventId'
     | '/admin/events/'
+    | '/$gatheringId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/redeem'
     | '/admin'
-    | '/home'
-    | '/rsvp'
+    | '/$gatheringId'
+    | '/$gatheringId/redeem'
     | '/admin/guests'
     | '/admin/obligations'
-    | '/events/$eventId'
+    | '/$gatheringId/home'
+    | '/$gatheringId/rsvp'
     | '/admin/events/$eventId'
     | '/admin/events'
+    | '/$gatheringId/events/$eventId'
   id:
     | '__root__'
     | '/_guest'
     | '/admin'
-    | '/_guest/_rsvp'
-    | '/_guest/redeem'
     | '/admin/_authed'
-    | '/_guest/'
     | '/admin/'
-    | '/_guest/_rsvp/home'
-    | '/_guest/_rsvp/rsvp'
+    | '/_guest/$gatheringId/_rsvp'
+    | '/_guest/$gatheringId/redeem'
     | '/admin/_authed/guests'
     | '/admin/_authed/obligations'
-    | '/_guest/_rsvp/events/$eventId'
+    | '/_guest/$gatheringId/'
+    | '/_guest/$gatheringId/_rsvp/home'
+    | '/_guest/$gatheringId/_rsvp/rsvp'
     | '/admin/_authed/events/$eventId'
     | '/admin/_authed/events/'
+    | '/_guest/$gatheringId/_rsvp/events/$eventId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -200,27 +210,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_guest/': {
-      id: '/_guest/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof GuestIndexRouteImport
-      parentRoute: typeof GuestRoute
-    }
-    '/_guest/_rsvp': {
-      id: '/_guest/_rsvp'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof GuestRsvpRouteImport
-      parentRoute: typeof GuestRoute
-    }
-    '/_guest/redeem': {
-      id: '/_guest/redeem'
-      path: '/redeem'
-      fullPath: '/redeem'
-      preLoaderRoute: typeof GuestRedeemRouteImport
-      parentRoute: typeof GuestRoute
-    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -235,19 +224,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/_guest/_rsvp/home': {
-      id: '/_guest/_rsvp/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof GuestRsvpHomeRouteImport
-      parentRoute: typeof GuestRsvpRoute
+    '/_guest/$gatheringId/': {
+      id: '/_guest/$gatheringId/'
+      path: '/$gatheringId'
+      fullPath: '/$gatheringId/'
+      preLoaderRoute: typeof GuestGatheringIdIndexRouteImport
+      parentRoute: typeof GuestRoute
     }
-    '/_guest/_rsvp/rsvp': {
-      id: '/_guest/_rsvp/rsvp'
-      path: '/rsvp'
-      fullPath: '/rsvp'
-      preLoaderRoute: typeof GuestRsvpRsvpRouteImport
-      parentRoute: typeof GuestRsvpRoute
+    '/_guest/$gatheringId/_rsvp': {
+      id: '/_guest/$gatheringId/_rsvp'
+      path: '/$gatheringId'
+      fullPath: '/$gatheringId'
+      preLoaderRoute: typeof GuestGatheringIdRsvpRouteImport
+      parentRoute: typeof GuestRoute
+    }
+    '/_guest/$gatheringId/redeem': {
+      id: '/_guest/$gatheringId/redeem'
+      path: '/$gatheringId/redeem'
+      fullPath: '/$gatheringId/redeem'
+      preLoaderRoute: typeof GuestGatheringIdRedeemRouteImport
+      parentRoute: typeof GuestRoute
     }
     '/admin/_authed/guests': {
       id: '/admin/_authed/guests'
@@ -263,12 +259,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedObligationsRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
-    '/_guest/_rsvp/events/$eventId': {
-      id: '/_guest/_rsvp/events/$eventId'
-      path: '/events/$eventId'
-      fullPath: '/events/$eventId'
-      preLoaderRoute: typeof GuestRsvpEventsEventIdRouteImport
-      parentRoute: typeof GuestRsvpRoute
+    '/_guest/$gatheringId/_rsvp/home': {
+      id: '/_guest/$gatheringId/_rsvp/home'
+      path: '/home'
+      fullPath: '/$gatheringId/home'
+      preLoaderRoute: typeof GuestGatheringIdRsvpHomeRouteImport
+      parentRoute: typeof GuestGatheringIdRsvpRoute
+    }
+    '/_guest/$gatheringId/_rsvp/rsvp': {
+      id: '/_guest/$gatheringId/_rsvp/rsvp'
+      path: '/rsvp'
+      fullPath: '/$gatheringId/rsvp'
+      preLoaderRoute: typeof GuestGatheringIdRsvpRsvpRouteImport
+      parentRoute: typeof GuestGatheringIdRsvpRoute
     }
     '/admin/_authed/events/': {
       id: '/admin/_authed/events/'
@@ -284,35 +287,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedEventsEventIdRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
+    '/_guest/$gatheringId/_rsvp/events/$eventId': {
+      id: '/_guest/$gatheringId/_rsvp/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/$gatheringId/events/$eventId'
+      preLoaderRoute: typeof GuestGatheringIdRsvpEventsEventIdRouteImport
+      parentRoute: typeof GuestGatheringIdRsvpRoute
+    }
   }
 }
 
-interface GuestRsvpRouteChildren {
-  GuestRsvpHomeRoute: typeof GuestRsvpHomeRoute
-  GuestRsvpRsvpRoute: typeof GuestRsvpRsvpRoute
-  GuestRsvpEventsEventIdRoute: typeof GuestRsvpEventsEventIdRoute
+interface GuestGatheringIdRsvpRouteChildren {
+  GuestGatheringIdRsvpHomeRoute: typeof GuestGatheringIdRsvpHomeRoute
+  GuestGatheringIdRsvpRsvpRoute: typeof GuestGatheringIdRsvpRsvpRoute
+  GuestGatheringIdRsvpEventsEventIdRoute: typeof GuestGatheringIdRsvpEventsEventIdRoute
 }
 
-const GuestRsvpRouteChildren: GuestRsvpRouteChildren = {
-  GuestRsvpHomeRoute: GuestRsvpHomeRoute,
-  GuestRsvpRsvpRoute: GuestRsvpRsvpRoute,
-  GuestRsvpEventsEventIdRoute: GuestRsvpEventsEventIdRoute,
+const GuestGatheringIdRsvpRouteChildren: GuestGatheringIdRsvpRouteChildren = {
+  GuestGatheringIdRsvpHomeRoute: GuestGatheringIdRsvpHomeRoute,
+  GuestGatheringIdRsvpRsvpRoute: GuestGatheringIdRsvpRsvpRoute,
+  GuestGatheringIdRsvpEventsEventIdRoute:
+    GuestGatheringIdRsvpEventsEventIdRoute,
 }
 
-const GuestRsvpRouteWithChildren = GuestRsvpRoute._addFileChildren(
-  GuestRsvpRouteChildren,
-)
+const GuestGatheringIdRsvpRouteWithChildren =
+  GuestGatheringIdRsvpRoute._addFileChildren(GuestGatheringIdRsvpRouteChildren)
 
 interface GuestRouteChildren {
-  GuestRsvpRoute: typeof GuestRsvpRouteWithChildren
-  GuestRedeemRoute: typeof GuestRedeemRoute
-  GuestIndexRoute: typeof GuestIndexRoute
+  GuestGatheringIdRsvpRoute: typeof GuestGatheringIdRsvpRouteWithChildren
+  GuestGatheringIdRedeemRoute: typeof GuestGatheringIdRedeemRoute
+  GuestGatheringIdIndexRoute: typeof GuestGatheringIdIndexRoute
 }
 
 const GuestRouteChildren: GuestRouteChildren = {
-  GuestRsvpRoute: GuestRsvpRouteWithChildren,
-  GuestRedeemRoute: GuestRedeemRoute,
-  GuestIndexRoute: GuestIndexRoute,
+  GuestGatheringIdRsvpRoute: GuestGatheringIdRsvpRouteWithChildren,
+  GuestGatheringIdRedeemRoute: GuestGatheringIdRedeemRoute,
+  GuestGatheringIdIndexRoute: GuestGatheringIdIndexRoute,
 }
 
 const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)

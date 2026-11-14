@@ -62,7 +62,8 @@ const meta = {
             cols={pick(SIZES, sizes)}
             render={(variant, size) => (
               <Link
-                to="/home"
+                to="/$gatheringId/home"
+                params={{ gatheringId: "1" }}
                 variant={variant}
                 size={size}
                 onClick={handleClick}
@@ -76,7 +77,12 @@ const meta = {
           <Section title="Text">
             <p className="text-lg">
               Not sure what to bring?{" "}
-              <Link to="/home" variant="text" onClick={handleClick}>
+              <Link
+                to="/$gatheringId/home"
+                params={{ gatheringId: "1" }}
+                variant="text"
+                onClick={handleClick}
+              >
                 {children}
               </Link>
             </p>

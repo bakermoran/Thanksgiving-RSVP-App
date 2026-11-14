@@ -7,7 +7,7 @@ import { requireSession } from "@/routes/-guards";
 import { Page } from "@/ui/guest/page";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_guest/_rsvp")({
+export const Route = createFileRoute("/_guest/$gatheringId/_rsvp")({
   beforeLoad: requireSession,
   loader: async () => {
     const [inviteGroup, events] = await Promise.all([

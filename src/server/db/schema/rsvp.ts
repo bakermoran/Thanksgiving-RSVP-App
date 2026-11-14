@@ -5,6 +5,7 @@ import { type z } from "zod";
 
 import { baseColumns } from "./base";
 import { eventsTable } from "./event";
+import { gatheringsTable } from "./gathering";
 import { inviteesTable } from "./invitee";
 
 export const rsvpsTable = sqliteTable(
@@ -18,6 +19,9 @@ export const rsvpsTable = sqliteTable(
       .notNull()
       .references(() => inviteesTable.id),
     isAttending: int("is_attending", { mode: "boolean" }).notNull(),
+    gatheringId: int("gathering_id")
+      .notNull()
+      .references(() => gatheringsTable.id),
   },
   (table) => [
     check("rsvps_is_attending_bool", sql`${table.isAttending} IN (0, 1)`),

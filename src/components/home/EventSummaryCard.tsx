@@ -7,6 +7,9 @@ import { Card } from "@/ui/guest/card";
 import { Illustration } from "@/ui/guest/illustration";
 import { Link } from "@/ui/guest/link";
 import { ListItem } from "@/ui/guest/list";
+import { getRouteApi } from "@tanstack/react-router";
+
+const rsvpLayout = getRouteApi("/_guest/$gatheringId/_rsvp");
 
 interface EventSummaryCardProps {
   event: Event;
@@ -21,6 +24,7 @@ export const EventSummaryCard = ({
   responses,
   tilt,
 }: EventSummaryCardProps) => {
+  const { gatheringId } = rsvpLayout.useParams();
   const needsResponse = invitees.some((i) => !responses.has(i.id));
 
   return (
@@ -58,8 +62,8 @@ export const EventSummaryCard = ({
 
       <div className="mt-auto">
         <Link
-          to="/events/$eventId"
-          params={{ eventId: event.id }}
+          to="/$gatheringId/events/$eventId"
+          params={{ gatheringId, eventId: event.id }}
           variant={needsResponse ? "primary" : "ghost"}
           size="sm"
         >

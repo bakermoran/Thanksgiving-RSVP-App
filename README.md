@@ -1,6 +1,8 @@
-# Thanksgiving RSVP app
+# Events RSVP app
 
 I wrote this for fun to use with some friends this Thanksgiving because I wanted to 1. Use tanstack-start on something and 2. Just write some code by hand, since I rarely get to do that at work anymore.
+
+Also found that there isn't really a platform that lets you rsvp and sign up for/create a list of things to bring to an event. I modeled the RSVP flow after what I've seen wedding RSVP websites do, and the bolted on the signup functionality for pot luck dishes.
 
 AI did most of the frontend because I was primarily interested in getting some exposure to tanstack-start.
 

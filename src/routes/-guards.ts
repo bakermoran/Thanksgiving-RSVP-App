@@ -2,15 +2,17 @@ import { getCurrentAdmin } from "@/functions/adminAuth.functions";
 import { getCurrentSession } from "@/functions/auth.functions";
 import { redirect } from "@tanstack/react-router";
 
-export async function requireSession() {
+type GatheringParams = { params: { gatheringId: string } };
+
+export async function requireSession({ params }: GatheringParams) {
   const session = await getCurrentSession();
-  if (!session) throw redirect({ to: "/" });
+  if (!session) throw redirect({ to: "/$gatheringId", params });
   return { session };
 }
 
-export async function redirectIfLoggedIn() {
+export async function redirectIfLoggedIn({ params }: GatheringParams) {
   const session = await getCurrentSession();
-  if (session) throw redirect({ to: "/home" });
+  if (session) throw redirect({ to: "/$gatheringId/home", params });
 }
 
 export async function requireAdmin() {

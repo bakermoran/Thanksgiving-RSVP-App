@@ -19,7 +19,7 @@ const flashMessages = {
 
 type FlashKey = keyof typeof flashMessages;
 
-export const Route = createFileRoute("/_guest/")({
+export const Route = createFileRoute("/_guest/$gatheringId/")({
   validateSearch: z.object({
     error: z
       .enum(Object.keys(flashMessages) as [FlashKey, ...FlashKey[]])
@@ -33,16 +33,15 @@ export const Route = createFileRoute("/_guest/")({
 function Landing() {
   const navigate = useNavigate();
   const { error } = Route.useSearch();
+  const params = Route.useParams();
 
-  // Hold onto the flash after we strip it from the URL so it shows once,
-  // but doesn't come back on refresh.
   const [flash] = useState(() => (error ? flashMessages[error] : undefined));
 
   useEffect(() => {
     if (error) {
-      navigate({ to: "/", search: {}, replace: true });
+      navigate({ to: "/$gatheringId", params, search: {}, replace: true });
     }
-  }, [error, navigate]);
+  }, [error, navigate, params]);
 
   return (
     <Page width="sm" className="pt-8">
@@ -64,7 +63,9 @@ function Landing() {
       {flash && <Alert className="mb-4">{flash}</Alert>}
 
       <Card>
-        <GetInviteeForm onSubmit={() => navigate({ to: "/rsvp" })} />
+        <GetInviteeForm
+          onSubmit={() => navigate({ to: "/$gatheringId/rsvp", params })}
+        />
       </Card>
 
       <HarvestRow />

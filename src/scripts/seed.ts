@@ -1,5 +1,6 @@
 import { db } from "@/server/db/client";
 import { eventsTable } from "@/server/db/schema/event";
+import { gatheringsTable } from "@/server/db/schema/gathering";
 import { inviteGroupsTable } from "@/server/db/schema/inviteGroup";
 import { inviteesTable } from "@/server/db/schema/invitee";
 import {
@@ -17,12 +18,21 @@ const schema = {
   eventsTable,
   obligationsTable,
   obligationCategoriesTable,
+  gatheringsTable,
 };
 
 // Include rsvps in the reset so FK constraints don't block wiping invitees/events.
 await reset(db, { ...schema, rsvpsTable, usersTable });
 
 await seed(db, schema, { seed: 1 }).refine((f) => ({
+  gatheringsTable: {
+    count: 1,
+    columns: {
+      name: f.default({ defaultValue: "Default gathering" }),
+      createdAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
+      updatedAt: f.date({ minDate: new Date(2020, 0, 1), maxDate: new Date() }),
+    },
+  },
   inviteesTable: {
     count: 10,
     columns: {
@@ -75,7 +85,6 @@ await seed(db, schema, { seed: 1 }).refine((f) => ({
   },
 }));
 
-// Users go through createUser so the password is hashed like in prod.
 const admin = await userService.create({
   email: "admin@example.com",
   password: "gobblegobble",

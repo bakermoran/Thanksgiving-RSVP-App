@@ -3,6 +3,7 @@ import { createSelectSchema } from "drizzle-orm/zod";
 import { type z } from "zod";
 
 import { baseColumns } from "./base";
+import { gatheringsTable } from "./gathering";
 import { type Invitee, inviteesTable } from "./invitee";
 
 export const obligationsTable = sqliteTable(
@@ -15,6 +16,9 @@ export const obligationsTable = sqliteTable(
       .references(() => obligationCategoriesTable.id, { onDelete: "cascade" })
       .notNull(),
     sortOrder: int("sort_order").notNull(),
+    gatheringId: int("gathering_id")
+      .notNull()
+      .references(() => gatheringsTable.id),
   },
   (table) => [
     uniqueIndex("idx_obligations_name").on(table.name),
@@ -28,6 +32,9 @@ export const obligationCategoriesTable = sqliteTable(
     ...baseColumns,
     name: text().notNull(),
     sortOrder: int("sort_order").notNull(),
+    gatheringId: int("gathering_id")
+      .notNull()
+      .references(() => gatheringsTable.id),
   },
   (table) => [
     uniqueIndex("idx_obligations_category_name").on(table.name),

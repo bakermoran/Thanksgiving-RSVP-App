@@ -8,19 +8,27 @@ import { PageHeader } from "@/ui/guest/page-header";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 
-export const Route = createFileRoute("/_guest/redeem")({
+export const Route = createFileRoute("/_guest/$gatheringId/redeem")({
   component: RedeemComponent,
   validateSearch: z.object({
     code: z.string().optional(),
   }),
-  beforeLoad: async ({ search }) => {
+  beforeLoad: async ({ params, search }) => {
     if (!search.code) {
-      throw redirect({ to: "/", search: { error: "missing-invite" } });
+      throw redirect({
+        to: "/$gatheringId",
+        params,
+        search: { error: "missing-invite" },
+      });
     }
 
     const valid = await validateInvite({ data: { code: search.code } });
     if (!valid) {
-      throw redirect({ to: "/", search: { error: "invalid-invite" } });
+      throw redirect({
+        to: "/$gatheringId",
+        params,
+        search: { error: "invalid-invite" },
+      });
     }
 
     return { code: search.code };
@@ -30,6 +38,7 @@ export const Route = createFileRoute("/_guest/redeem")({
 function RedeemComponent() {
   const navigate = useNavigate();
   const { code } = Route.useRouteContext();
+  const params = Route.useParams();
 
   return (
     <Page width="sm" className="pt-8">
@@ -51,7 +60,7 @@ function RedeemComponent() {
       <Card>
         <CreateInviteeForm
           code={code}
-          onSubmit={() => navigate({ to: "/rsvp" })}
+          onSubmit={() => navigate({ to: "/$gatheringId/rsvp", params })}
         />
       </Card>
 

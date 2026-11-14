@@ -3,6 +3,7 @@ import { createSelectSchema } from "drizzle-orm/zod";
 import { type z } from "zod";
 
 import { baseColumns } from "./base";
+import { gatheringsTable } from "./gathering";
 import { inviteGroupsTable } from "./inviteGroup";
 
 export const inviteesTable = sqliteTable(
@@ -14,6 +15,9 @@ export const inviteesTable = sqliteTable(
       .references(() => inviteGroupsTable.id),
     firstName: text("first_name").notNull(),
     lastName: text("last_name").notNull(),
+    gatheringId: int("gathering_id")
+      .notNull()
+      .references(() => gatheringsTable.id),
   },
   (table) => [
     index("idx_invitees_fullname").on(table.firstName, table.lastName),

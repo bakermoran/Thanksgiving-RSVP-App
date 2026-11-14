@@ -4,6 +4,7 @@ import { createSelectSchema } from "drizzle-orm/zod";
 import { type z } from "zod";
 
 import { baseColumns } from "./base";
+import { gatheringsTable } from "./gathering";
 import { inviteesTable } from "./invitee";
 
 export const invitesTable = sqliteTable(
@@ -17,6 +18,9 @@ export const invitesTable = sqliteTable(
       .default(sql`(datetime('now', '+7 days'))`),
     redeemedAt: text("redeemed_at"),
     redeemedBy: int("redeemed_by").references(() => inviteesTable.id),
+    gatheringId: int("gathering_id")
+      .notNull()
+      .references(() => gatheringsTable.id),
   },
   (table) => [uniqueIndex("unique_invite_code").on(table.code)],
 );

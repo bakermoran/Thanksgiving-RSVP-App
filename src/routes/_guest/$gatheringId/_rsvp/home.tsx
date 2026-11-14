@@ -8,9 +8,9 @@ import { Illustration } from "@/ui/guest/illustration";
 import { PageHeader } from "@/ui/guest/page-header";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
-const rsvpLayout = getRouteApi("/_guest/_rsvp");
+const rsvpLayout = getRouteApi("/_guest/$gatheringId/_rsvp");
 
-export const Route = createFileRoute("/_guest/_rsvp/home")({
+export const Route = createFileRoute("/_guest/$gatheringId/_rsvp/home")({
   loader: async () => {
     const [categories, rsvps] = await Promise.all([
       getObligationCategories(),

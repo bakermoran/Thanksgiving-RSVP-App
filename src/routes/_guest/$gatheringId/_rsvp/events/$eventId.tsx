@@ -18,9 +18,11 @@ import {
 } from "@tanstack/react-router";
 import { z } from "zod";
 
-const rsvpLayout = getRouteApi("/_guest/_rsvp");
+const rsvpLayout = getRouteApi("/_guest/$gatheringId/_rsvp");
 
-export const Route = createFileRoute("/_guest/_rsvp/events/$eventId")({
+export const Route = createFileRoute(
+  "/_guest/$gatheringId/_rsvp/events/$eventId",
+)({
   params: {
     parse: (p) => ({
       eventId: z.coerce.number().int().parse(p.eventId),
@@ -58,6 +60,7 @@ function EventPage() {
   const navigate = useNavigate();
   const { event, rsvps, completedAll } = Route.useLoaderData();
   const { inviteGroup, events } = rsvpLayout.useLoaderData();
+  const { gatheringId } = Route.useParams();
 
   const index = events.findIndex((e) => e.id === event.id);
   const prev = events[index - 1];
@@ -65,16 +68,22 @@ function EventPage() {
 
   const onSaved = () => {
     if (next && !completedAll) {
-      navigate({ to: "/events/$eventId", params: { eventId: next.id } });
+      navigate({
+        to: "/$gatheringId/events/$eventId",
+        params: { gatheringId, eventId: next.id },
+      });
     } else {
-      navigate({ to: "/home" });
+      navigate({ to: "/$gatheringId/home", params: { gatheringId } });
     }
   };
 
   const submitLabel = completedAll ? "Save" : next ? "Next" : "Review";
 
   const onProgressButtonClick = (id: number) => {
-    navigate({ to: "/events/$eventId", params: { eventId: id } });
+    navigate({
+      to: "/$gatheringId/events/$eventId",
+      params: { gatheringId, eventId: id },
+    });
   };
 
   return (
@@ -115,8 +124,8 @@ function EventPage() {
       {prev && !completedAll && (
         <div className="mt-8 text-center">
           <Link
-            to="/events/$eventId"
-            params={{ eventId: prev.id }}
+            to="/$gatheringId/events/$eventId"
+            params={{ gatheringId, eventId: prev.id }}
             variant="text"
             className="text-lg"
           >

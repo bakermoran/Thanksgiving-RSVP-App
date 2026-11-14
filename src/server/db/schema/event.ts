@@ -1,9 +1,10 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-orm/zod";
 import { type z } from "zod";
 
 import { baseColumns } from "./base";
+import { gatheringsTable } from "./gathering";
 
 export const eventsTable = sqliteTable("events", {
   ...baseColumns,
@@ -19,6 +20,9 @@ export const eventsTable = sqliteTable("events", {
   city: text().notNull(),
   state: text().notNull(),
   zip: text().notNull(),
+  gatheringId: int("gathering_id")
+    .notNull()
+    .references(() => gatheringsTable.id),
 });
 
 export const eventsSchema = createSelectSchema(eventsTable);
