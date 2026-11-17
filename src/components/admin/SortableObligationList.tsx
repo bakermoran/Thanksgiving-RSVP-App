@@ -1,5 +1,8 @@
 import { reorderObligations } from "@/functions/admin.functions";
-import type { ObligationWithInvitee } from "@/shared/types";
+import type {
+  InviteGroupWithInvitees,
+  ObligationWithInvitee,
+} from "@/shared/types";
 import { ScrollArea } from "@/ui/platform/scroll-area";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
@@ -13,12 +16,14 @@ import { useSortableOrder } from "./useSortableOrder";
 interface SortableObligationListProps {
   categoryId: number;
   obligations: ObligationWithInvitee[];
+  inviteGroups: InviteGroupWithInvitees[];
   onDestroy: (id: number) => Promise<void>;
 }
 
 export const SortableObligationList = ({
   categoryId,
   obligations,
+  inviteGroups,
   onDestroy,
 }: SortableObligationListProps) => {
   const { ordered, error, sensors, onDragEnd } = useSortableOrder(
@@ -51,6 +56,7 @@ export const SortableObligationList = ({
                 <AdminObligationRow
                   key={obligation.id}
                   obligation={obligation}
+                  inviteGroups={inviteGroups}
                   onDestroy={onDestroy}
                 />
               ))}

@@ -1,5 +1,8 @@
 import { reorderObligationCategories } from "@/functions/admin.functions";
-import type { ObligationCategoryWithObligations } from "@/shared/types";
+import type {
+  InviteGroupWithInvitees,
+  ObligationCategoryWithObligations,
+} from "@/shared/types";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { type ReactNode } from "react";
@@ -11,11 +14,13 @@ const DND_ID = "obligation-categories";
 
 interface SortableObligationCategoriesProps {
   categories: ObligationCategoryWithObligations[];
+  inviteGroups: InviteGroupWithInvitees[];
   children?: ReactNode;
 }
 
 export const SortableObligationCategories = ({
   categories,
+  inviteGroups,
   children,
 }: SortableObligationCategoriesProps) => {
   const { ordered, error, sensors, onDragEnd } = useSortableOrder(
@@ -43,7 +48,11 @@ export const SortableObligationCategories = ({
         >
           <div className="grid gap-6 md:grid-cols-2">
             {ordered.map((category) => (
-              <AdminObligationList key={category.id} category={category} />
+              <AdminObligationList
+                key={category.id}
+                category={category}
+                inviteGroups={inviteGroups}
+              />
             ))}
             {children}
           </div>

@@ -190,3 +190,19 @@ export async function destroyObligation({ id }: { id: number }) {
 
   return deleted;
 }
+
+export async function assignObligation({
+  id,
+  inviteeId,
+}: {
+  id: number;
+  inviteeId: number | null;
+}) {
+  const [assigned] = await db
+    .update(obligationsTable)
+    .set({ inviteeId })
+    .where(eq(obligationsTable.id, id))
+    .returning();
+
+  return assigned;
+}

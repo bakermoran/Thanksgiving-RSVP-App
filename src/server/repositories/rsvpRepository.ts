@@ -52,3 +52,17 @@ export function getAllRsvps() {
     })
     .from(rsvpsTable);
 }
+
+export async function deleteRsvp({
+  eventId,
+  inviteeId,
+}: {
+  eventId: number;
+  inviteeId: number;
+}) {
+  await db
+    .delete(rsvpsTable)
+    .where(
+      and(eq(rsvpsTable.eventId, eventId), eq(rsvpsTable.inviteeId, inviteeId)),
+    );
+}

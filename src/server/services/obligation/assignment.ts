@@ -54,6 +54,16 @@ export async function reorder({
   return obligationRepository.reorderObligations({ ids });
 }
 
+export async function assign({
+  id,
+  inviteeId,
+}: {
+  id: number;
+  inviteeId: number | null;
+}) {
+  return obligationRepository.assignObligation({ id, inviteeId });
+}
+
 export async function destroy({ id }: { id: number }) {
   return obligationRepository.destroyObligation({ id });
 }

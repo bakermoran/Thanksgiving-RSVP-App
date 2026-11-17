@@ -3,7 +3,10 @@ import {
   destroyObligationCategory,
   renameObligationCategory,
 } from "@/functions/admin.functions";
-import type { ObligationCategoryWithObligations } from "@/shared/types";
+import type {
+  InviteGroupWithInvitees,
+  ObligationCategoryWithObligations,
+} from "@/shared/types";
 import { Button } from "@/ui/platform/button";
 import {
   Card,
@@ -27,9 +30,13 @@ import { SortableObligationList } from "./SortableObligationList";
 
 interface AdminObligationListProps {
   category: ObligationCategoryWithObligations;
+  inviteGroups: InviteGroupWithInvitees[];
 }
 
-export const AdminObligationList = ({ category }: AdminObligationListProps) => {
+export const AdminObligationList = ({
+  category,
+  inviteGroups,
+}: AdminObligationListProps) => {
   const router = useRouter();
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -129,6 +136,7 @@ export const AdminObligationList = ({ category }: AdminObligationListProps) => {
           <SortableObligationList
             categoryId={category.id}
             obligations={category.obligations}
+            inviteGroups={inviteGroups}
             onDestroy={onDestroy}
           />
         ) : (

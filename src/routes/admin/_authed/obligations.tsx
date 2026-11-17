@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin/_authed/obligations")({
 });
 
 function ObligationsPage() {
-  const categories = Route.useLoaderData();
+  const { categories, inviteGroups } = Route.useLoaderData();
 
   return (
     <>
@@ -27,7 +27,10 @@ function ObligationsPage() {
         title="Obligations"
         description="Dishes and jobs guests can claim."
       />
-      <SortableObligationCategories categories={categories}>
+      <SortableObligationCategories
+        categories={categories}
+        inviteGroups={inviteGroups}
+      >
         <Card className="border-dashed shadow-none">
           <CardHeader>
             <CardTitle>New category</CardTitle>

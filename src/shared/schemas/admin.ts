@@ -106,3 +106,14 @@ export const reorderObligationsSchema = z.object({
     .min(1)
     .refine((ids) => new Set(ids).size === ids.length, "Duplicate item"),
 });
+
+export const setRsvpSchema = z.object({
+  eventId: z.number().int().positive(),
+  inviteeId: z.number().int().positive(),
+  isAttending: z.boolean().nullable(),
+});
+
+export const assignObligationSchema = z.object({
+  id: z.number().int().positive(),
+  inviteeId: z.number().int().positive().nullable(),
+});

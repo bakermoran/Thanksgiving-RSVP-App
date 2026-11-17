@@ -12,5 +12,9 @@
 - Event settings
   - Let invitees add obligations
   - etc
+- Integrated AI
+- SSO/rbac/enterprise features
+- audit log trail
+- Ab testing
 
 - Should obligations be per event?

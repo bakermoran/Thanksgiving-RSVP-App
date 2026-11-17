@@ -1,9 +1,13 @@
+import { BadgeSelect } from "@/components/admin/BadgeSelect";
 import { groupLabel } from "@/components/admin/groupLabel";
-import { removeEvent } from "@/functions/admin.functions";
+import { removeEvent, setRsvp } from "@/functions/admin.functions";
 import { toAddressString } from "@/shared/address";
 import { formatEventTimeRange } from "@/shared/date";
-import { type Event, type InviteGroupWithInvitees } from "@/shared/types";
-import { Badge } from "@/ui/platform/badge";
+import {
+  type Event,
+  type InviteGroupWithInvitees,
+  type Invitee,
+} from "@/shared/types";
 import { Button } from "@/ui/platform/button";
 import {
   Card,
@@ -18,22 +22,91 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 
+type Response = "attending" | "declined" | "none";
+
+const RESPONSES: Record<
+  Response,
+  { label: string; isAttending: boolean | null; className: string }
+> = {
+  attending: {
+    label: "Attending",
+    isAttending: true,
+    className:
+      "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  },
+  declined: {
+    label: "Declined",
+    isAttending: false,
+    className: "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300",
+  },
+  none: {
+    label: "No response",
+    isAttending: null,
+    className: "",
+  },
+};
+
+const toResponse = (isAttending: boolean | undefined): Response =>
+  isAttending === undefined ? "none" : isAttending ? "attending" : "declined";
+
 const ResponseBadge = ({
+  eventId,
+  invitee,
   isAttending,
 }: {
+  eventId: number;
+  invitee: Invitee;
   isAttending: boolean | undefined;
 }) => {
-  if (isAttending === undefined) {
-    return <Badge variant="outline">No response</Badge>;
-  }
-  return isAttending ? (
-    <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-      Attending
-    </Badge>
-  ) : (
-    <Badge className="bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">
-      Declined
-    </Badge>
+  const router = useRouter();
+  const [pending, setPending] = useState<Response | null>(null);
+  const [error, setError] = useState(false);
+  const current = pending ?? toResponse(isAttending);
+  const fullName = `${invitee.firstName} ${invitee.lastName}`;
+
+  const onChange = async (next: Response) => {
+    setError(false);
+    setPending(next);
+    try {
+      await setRsvp({
+        data: {
+          eventId,
+          inviteeId: invitee.id,
+          isAttending: RESPONSES[next].isAttending,
+        },
+      });
+      await router.invalidate();
+    } catch (error) {
+      console.error(error);
+      setError(true);
+    } finally {
+      setPending(null);
+    }
+  };
+
+  return (
+    <span className="flex items-center gap-2">
+      {error && (
+        <span role="alert" className="text-xs text-destructive">
+          Couldn't save
+        </span>
+      )}
+      <BadgeSelect
+        label={RESPONSES[current].label}
+        variant={current === "none" ? "outline" : "default"}
+        className={RESPONSES[current].className}
+        ariaLabel={`RSVP for ${fullName}`}
+        value={current}
+        isPending={pending !== null}
+        onChange={(value) => onChange(value as Response)}
+      >
+        {Object.entries(RESPONSES).map(([value, { label }]) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </BadgeSelect>
+    </span>
   );
 };
 
@@ -145,7 +218,11 @@ export const AdminEventCard = ({
                       <span>
                         {invitee.firstName} {invitee.lastName}
                       </span>
-                      <ResponseBadge isAttending={responses.get(invitee.id)} />
+                      <ResponseBadge
+                        eventId={event.id}
+                        invitee={invitee}
+                        isAttending={responses.get(invitee.id)}
+                      />
                     </li>
                   ))}
                 </ul>

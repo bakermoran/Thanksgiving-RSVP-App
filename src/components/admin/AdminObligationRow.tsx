@@ -1,24 +1,40 @@
-import { renameObligation } from "@/functions/admin.functions";
-import type { ObligationWithInvitee } from "@/shared/types";
-import { Badge } from "@/ui/platform/badge";
+import {
+  assignObligation,
+  renameObligation,
+} from "@/functions/admin.functions";
+import type {
+  InviteGroupWithInvitees,
+  ObligationWithInvitee,
+} from "@/shared/types";
 import { Button } from "@/ui/platform/button";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useRouter } from "@tanstack/react-router";
 import { cn } from "cn";
 import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
 
+import { BadgeSelect } from "./BadgeSelect";
 import { EditableName } from "./EditableName";
+import { groupLabel } from "./groupLabel";
+
+const OPEN = "open";
 
 export const AdminObligationRow = ({
   obligation,
+  inviteGroups,
   onDestroy,
 }: {
   obligation: ObligationWithInvitee;
+  inviteGroups: InviteGroupWithInvitees[];
   onDestroy: (id: number) => Promise<void>;
 }) => {
+  const router = useRouter();
   const [isBusy, setIsBusy] = useState(false);
+  const [pendingAssignee, setPendingAssignee] = useState<string | null>(null);
+  const [assignError, setAssignError] = useState(false);
   const { invitee } = obligation;
+  const assignee = pendingAssignee ?? (invitee ? String(invitee.id) : OPEN);
   const {
     attributes,
     listeners,
@@ -35,6 +51,25 @@ export const AdminObligationRow = ({
       await onDestroy(obligation.id);
     } finally {
       setIsBusy(false);
+    }
+  };
+
+  const onAssign = async (value: string) => {
+    setAssignError(false);
+    setPendingAssignee(value);
+    try {
+      await assignObligation({
+        data: {
+          id: obligation.id,
+          inviteeId: value === OPEN ? null : Number(value),
+        },
+      });
+      await router.invalidate();
+    } catch (error) {
+      console.error(error);
+      setAssignError(true);
+    } finally {
+      setPendingAssignee(null);
     }
   };
 
@@ -74,11 +109,30 @@ export const AdminObligationRow = ({
           {invitee ? `${invitee.firstName} ${invitee.lastName}` : "Unclaimed"}
         </p>
       </div>
-      {invitee ? (
-        <Badge variant="secondary">Claimed</Badge>
-      ) : (
-        <Badge variant="outline">Open</Badge>
+      {assignError && (
+        <span role="alert" className="text-xs text-destructive">
+          Couldn't save
+        </span>
       )}
+      <BadgeSelect
+        label={assignee === OPEN ? "Open" : "Claimed"}
+        variant={assignee === OPEN ? "outline" : "secondary"}
+        ariaLabel={`Who's bringing ${obligation.name}`}
+        value={assignee}
+        isPending={pendingAssignee !== null}
+        onChange={onAssign}
+      >
+        <option value={OPEN}>Open</option>
+        {inviteGroups.map((group) => (
+          <optgroup key={group.id} label={groupLabel(group)}>
+            {group.invitees.map((i) => (
+              <option key={i.id} value={i.id}>
+                {i.firstName} {i.lastName}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </BadgeSelect>
       <Button
         variant="ghost"
         size="icon-sm"

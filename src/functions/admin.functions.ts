@@ -8,6 +8,7 @@ import {
   addObligationCategorySchema,
   addObligationSchema,
   adminEventIdSchema,
+  assignObligationSchema,
   createEventSchema,
   destroyObligationCategorySchema,
   destroyObligationSchema,
@@ -20,6 +21,7 @@ import {
   renameObligationSchema,
   reorderObligationCategoriesSchema,
   reorderObligationsSchema,
+  setRsvpSchema,
   updateEventSchema,
 } from "@/shared/schemas/admin";
 import { notFound } from "@tanstack/react-router";
@@ -38,6 +40,17 @@ export const getAdminEvents = createServerFn({
       rsvpService.listAll(),
     ]);
     return { events, inviteGroups, rsvps };
+  });
+
+export const setRsvp = createServerFn({
+  method: "POST",
+})
+  .middleware([adminAuthMiddleware])
+  .validator(setRsvpSchema)
+  .handler(async ({ data }) => {
+    const saved = await rsvpService.set(data);
+    if (!saved) throw notFound();
+    return saved;
   });
 
 export const getAdminEvent = createServerFn({
@@ -61,7 +74,24 @@ export const getAdminObligations = createServerFn({
   method: "GET",
 })
   .middleware([adminAuthMiddleware])
-  .handler(async () => obligationService.listCategories());
+  .handler(async () => {
+    const [categories, inviteGroups] = await Promise.all([
+      obligationService.listCategories(),
+      inviteGroupService.list(),
+    ]);
+    return { categories, inviteGroups };
+  });
+
+export const assignObligation = createServerFn({
+  method: "POST",
+})
+  .middleware([adminAuthMiddleware])
+  .validator(assignObligationSchema)
+  .handler(async ({ data }) => {
+    const obligation = await obligationService.assign(data);
+    if (!obligation) throw notFound();
+    return obligation;
+  });
 
 export const addObligation = createServerFn({
   method: "POST",
